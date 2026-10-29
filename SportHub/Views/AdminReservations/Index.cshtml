@@ -1,0 +1,124 @@
+@*
+========================================
+ADMIN RESERVATION MODULE - RESERVATION LIST PAGE
+========================================
+*@
+
+@model SportHub.ViewModels.AdminReservationIndexViewModel
+
+@{
+    ViewData["Title"] = "Manage reservations";
+    var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="h2 mb-1">Manage reservations</h1>
+        <p class="text-muted mb-0">Review, filter and process member reservations.</p>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="alert">@successMessage</div>
+}
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+<form method="get" class="card card-body mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label asp-for="Status" class="form-label"></label>
+            <select asp-for="Status" asp-items="Model.StatusOptions" class="form-select"></select>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="FacilityId" class="form-label">Facility</label>
+            <select asp-for="FacilityId" asp-items="Model.FacilityOptions" class="form-select"></select>
+        </div>
+        <div class="col-md-2">
+            <label asp-for="ReservationDate" class="form-label">Date</label>
+            <input asp-for="ReservationDate" class="form-control" type="date" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="MemberSearch" class="form-label">Member or reservation</label>
+            <input asp-for="MemberSearch" class="form-control"
+                   placeholder="Name, email or number" />
+        </div>
+        <div class="col-md-1 d-grid">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+    <div class="mt-2">
+        <a asp-action="Index" class="btn btn-sm btn-outline-secondary">Clear filters</a>
+    </div>
+</form>
+
+@if (Model.Reservations.Count == 0)
+{
+    <div class="alert alert-info">No reservations match the selected filters.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Reservation</th>
+                    <th>Member</th>
+                    <th>Facility</th>
+                    <th>Date and time</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th>Amount</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reservation in Model.Reservations)
+                {
+                    var statusBadgeClass = reservation.Status switch
+                    {
+                        ReservationStatuses.Pending => "bg-warning text-dark",
+                        ReservationStatuses.Approved => "bg-success",
+                        ReservationStatuses.Rejected => "bg-danger",
+                        ReservationStatuses.Completed => "bg-primary",
+                        _ => "bg-secondary"
+                    };
+
+                    var canUpdate = reservation.Status is
+                        ReservationStatuses.Pending or ReservationStatuses.Approved;
+
+                    <tr>
+                        <td>@reservation.ReservationNumber</td>
+                        <td>
+                            @reservation.User.FullName
+                            <div class="small text-muted">@reservation.User.Email</div>
+                        </td>
+                        <td>@reservation.Facility.Name</td>
+                        <td>
+                            @reservation.ReservationDate.ToString("dd MMM yyyy")
+                            <div class="small text-muted">@reservation.TimeSlot.DisplayText</div>
+                        </td>
+                        <td><span class="badge @statusBadgeClass">@reservation.Status</span></td>
+                        <td>@(reservation.Payment?.Status ?? PaymentStatuses.Unpaid)</td>
+                        <td>RM @reservation.TotalAmount.ToString("N2")</td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@reservation.ReservationId"
+                               asp-route-returnUrl="@returnUrl"
+                               class="btn btn-sm btn-outline-primary">Details</a>
+                            @if (canUpdate)
+                            {
+                                <a asp-action="UpdateStatus" asp-route-id="@reservation.ReservationId"
+                                   asp-route-returnUrl="@returnUrl"
+                                   class="btn btn-sm btn-primary">Update status</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

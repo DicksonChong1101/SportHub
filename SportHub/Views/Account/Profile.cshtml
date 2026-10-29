@@ -1,0 +1,54 @@
+@*
+========================================
+ACCOUNT MODULE - PROFILE PAGE
+========================================
+*@
+
+@model SportHub.ViewModels.ProfileViewModel
+
+@{
+    ViewData["Title"] = "My profile";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="text-center mb-4">
+            <img src="@Model.ProfileImagePath"
+                 alt="@Model.FullName profile image"
+                 class="profile-avatar profile-avatar-large" />
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h1 class="h2 mb-1">My profile</h1>
+                <p class="text-muted mb-0">Review and manage your SportHub account.</p>
+            </div>
+            <span class="badge bg-primary">@Model.Role</span>
+        </div>
+
+        @if (TempData["SuccessMessage"] is string successMessage)
+        {
+            <div class="alert alert-success" role="alert">@successMessage</div>
+        }
+
+        <dl class="row border rounded p-3 mb-3">
+            <dt class="col-sm-4">Full name</dt>
+            <dd class="col-sm-8">@Model.FullName</dd>
+            <dt class="col-sm-4">Email</dt>
+            <dd class="col-sm-8">@Model.Email</dd>
+            <dt class="col-sm-4">Phone number</dt>
+            <dd class="col-sm-8">@(Model.PhoneNumber ?? "Not provided")</dd>
+            <dt class="col-sm-4">Member since</dt>
+            <dd class="col-sm-8">@Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</dd>
+            <dt class="col-sm-4">Last login</dt>
+            <dd class="col-sm-8">
+                @(Model.LastLoginAt.HasValue
+                    ? Model.LastLoginAt.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm")
+                    : "Not available")
+            </dd>
+        </dl>
+
+        <a asp-action="EditProfile" class="btn btn-primary">Edit profile</a>
+        <a asp-action="ChangePassword" class="btn btn-outline-secondary">Change password</a>
+    </div>
+</div>

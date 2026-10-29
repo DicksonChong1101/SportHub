@@ -1,0 +1,105 @@
+@*
+========================================
+BOOKING MODULE - FACILITY LIST PAGE
+========================================
+*@
+
+@using SportHub.Services
+@model IReadOnlyList<Facility>
+
+@{
+    ViewData["Title"] = "Book a facility";
+    var selectedFacilityType = ViewData["FacilityType"] as string;
+}
+
+<div class="mb-4">
+    <span class="text-primary fw-semibold text-uppercase small">
+        SportHub catalogue
+    </span>
+    <h1 class="h2 mb-1">Book a facility</h1>
+    <p class="text-muted mb-0">
+        Choose an active sports facility to view its details and reserve a time.
+    </p>
+</div>
+
+<form method="get" class="card card-body border-0 shadow-sm mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-sm-7 col-lg-4">
+            <label for="facilityType" class="form-label">Indoor or outdoor</label>
+            <select id="facilityType" name="facilityType" class="form-select">
+                <option value="">All facilities</option>
+                <option value="@FacilityTypes.Indoor" selected="@(selectedFacilityType == FacilityTypes.Indoor)">Indoor</option>
+                <option value="@FacilityTypes.Outdoor" selected="@(selectedFacilityType == FacilityTypes.Outdoor)">Outdoor</option>
+            </select>
+        </div>
+        <div class="col-sm-5 col-lg-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+        </div>
+    </div>
+</form>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">
+        No facilities are currently available for booking.
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var facility in Model)
+        {
+            var primaryImage = facility.FacilityImages
+                .OrderByDescending(image => image.IsPrimary)
+                .ThenBy(image => image.DisplayOrder)
+                .ThenBy(image => image.FacilityImageId)
+                .FirstOrDefault();
+
+            var displayImagePath = FacilityImageService.GetDisplayPath(
+                primaryImage,
+                facility.FacilityCategory.Name);
+
+            <div class="col-md-6 col-xl-4">
+                <article class="card booking-facility-card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="booking-card-main">
+                            <div class="booking-card-copy">
+                                <span class="badge bg-secondary mb-2">
+                                    @facility.FacilityCategory.Name
+                                </span>
+
+                                <h2 class="h5 mb-2">@facility.Name</h2>
+
+                                <p class="booking-card-location mb-0">
+                                    <span aria-hidden="true">📍</span>
+                                    @facility.Location
+                                </p>
+                            </div>
+
+                            <img src="@displayImagePath"
+                                 alt="@facility.Name display cover"
+                                 class="booking-card-image"
+                                 loading="lazy" />
+                        </div>
+
+                        <p class="booking-card-description">
+                            @(facility.Description ?? "No description available.")
+                        </p>
+
+                        <p class="booking-card-price mt-auto">
+                            RM @facility.PricePerSlot.ToString("N2")
+                            <span>per slot</span>
+                        </p>
+
+                        <a asp-action="Details"
+                           asp-route-id="@facility.FacilityId"
+                           class="btn btn-primary w-100">
+                            View and book
+                        </a>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,37 @@
+@model SportHub.ViewModels.MaintenanceBlockFormViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+<div class="mb-3">
+    <label asp-for="FacilityId" class="form-label"></label>
+    <select asp-for="FacilityId" asp-items="Model.FacilityOptions" class="form-select">
+        <option value="0">Select a facility</option>
+    </select>
+    <span asp-validation-for="FacilityId" class="text-danger"></span>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="StartAt" class="form-label"></label>
+        <input asp-for="StartAt" asp-format="{0:yyyy-MM-ddTHH:mm}"
+               type="datetime-local" class="form-control" />
+        <span asp-validation-for="StartAt" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="EndAt" class="form-label"></label>
+        <input asp-for="EndAt" asp-format="{0:yyyy-MM-ddTHH:mm}"
+               type="datetime-local" class="form-control" />
+        <span asp-validation-for="EndAt" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Reason" class="form-label"></label>
+    <textarea asp-for="Reason" class="form-control" rows="3"></textarea>
+    <span asp-validation-for="Reason" class="text-danger"></span>
+</div>
+
+<div class="form-check mb-3">
+    <input asp-for="IsActive" class="form-check-input" />
+    <label asp-for="IsActive" class="form-check-label"></label>
+</div>

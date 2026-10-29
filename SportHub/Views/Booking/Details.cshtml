@@ -1,0 +1,58 @@
+@*
+========================================
+BOOKING MODULE - FACILITY DETAILS PAGE
+========================================
+*@
+
+@using SportHub.Services
+@model Facility
+
+@{
+    ViewData["Title"] = Model.Name;
+    var galleryImages = Model.FacilityImages
+        .OrderByDescending(image => image.IsPrimary)
+        .ThenBy(image => image.DisplayOrder)
+        .ThenBy(image => image.FacilityImageId)
+        .ToList();
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <span class="badge bg-secondary mb-2">@Model.FacilityCategory.Name</span>
+        <h1 class="h2">@Model.Name</h1>
+        <p class="lead">@(Model.Description ?? "No description available.")</p>
+
+        @if (galleryImages.Count > 0)
+        {
+            <div class="row g-3 mb-4">
+                @foreach (var image in galleryImages)
+                {
+                    <div class="col-sm-6">
+                        <img src="@FacilityImageService.GetDisplayPath(image)"
+                             alt="@(image.AltText ?? Model.Name)"
+                             class="img-fluid rounded-3 shadow-sm w-100"
+                             style="height: 240px; object-fit: cover;"
+                             loading="lazy" />
+                    </div>
+                }
+            </div>
+        }
+
+        <dl class="row">
+            <dt class="col-sm-4">Location</dt>
+            <dd class="col-sm-8">@Model.Location</dd>
+            <dt class="col-sm-4">Capacity</dt>
+            <dd class="col-sm-8">@Model.Capacity</dd>
+            <dt class="col-sm-4">Price per slot</dt>
+            <dd class="col-sm-8">RM @Model.PricePerSlot.ToString("N2")</dd>
+        </dl>
+
+        @if (User.IsInRole(UserRoles.Member))
+        {
+            <a asp-controller="Reservations" asp-action="Create"
+               asp-route-facilityId="@Model.FacilityId"
+               class="btn btn-primary">Reserve this facility</a>
+        }
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to facilities</a>
+    </div>
+</div>

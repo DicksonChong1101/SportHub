@@ -1,0 +1,1104 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Student B: reservation QR pass and scanner result cards. */
+.reservation-pass-card {
+  background: linear-gradient(145deg, #f3fff6, #ffffff);
+  border: 1px solid rgba(25, 135, 84, 0.22);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 0.75rem 2rem rgba(20, 55, 35, 0.08);
+}
+
+.reservation-qr-code {
+  display: block;
+  width: min(100%, 230px);
+  aspect-ratio: 1;
+  margin: 0.75rem auto;
+  padding: 0.5rem;
+  background: #fff;
+  border-radius: 0.75rem;
+}
+
+.reservation-validation-card {
+  border-top: 0.35rem solid #198754 !important;
+}
+
+/* ======================================================
+   ACCOUNT MODULE - PASSWORD RECOVERY UI
+   ====================================================== */
+.recovery-shell {
+  min-height: 68vh;
+  align-items: center;
+  padding-block: 2rem 4rem;
+}
+
+.recovery-card {
+  overflow: hidden;
+  border-top: 0.4rem solid #198754 !important;
+  border-radius: 1.25rem;
+  background: linear-gradient(160deg, #ffffff 55%, #f1fbf4 100%);
+  box-shadow: 0 1rem 3rem rgba(18, 59, 36, 0.13);
+}
+
+.recovery-brand-logo {
+  width: 86px;
+  height: 86px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 0.5rem 1.5rem rgba(25, 135, 84, 0.18);
+}
+
+.recovery-status-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+
+.recovery-status-success {
+  color: #146c43;
+  background: #d1e7dd;
+}
+
+.recovery-status-warning {
+  color: #856404;
+  background: #fff3cd;
+}
+
+.profile-avatar {
+  display: inline-block;
+  object-fit: cover;
+  background-color: #e9ecef;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0.2rem 0.65rem rgba(0, 0, 0, 0.14);
+}
+
+.profile-avatar-nav {
+  width: 32px;
+  height: 32px;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+}
+
+.profile-avatar-large {
+  width: 128px;
+  height: 128px;
+}
+
+.profile-avatar-dashboard {
+  width: 88px;
+  height: 88px;
+}
+
+.home-account-dashboard {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8fbff, #eef5ff);
+  border: 1px solid #d8e7ff;
+  border-radius: 1rem;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+/* ======================================================
+   HOME MODULE - PUBLIC FACILITY CATALOGUE
+   ====================================================== */
+.home-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 430px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(2rem, 7vw, 5rem);
+  color: #fff;
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(90deg, rgba(5, 20, 43, 0.94) 0%, rgba(7, 35, 70, 0.78) 53%, rgba(5, 20, 43, 0.25) 100%),
+    url("/images/facilities/sport-hero.svg") center / cover no-repeat;
+  box-shadow: 0 1.25rem 3rem rgba(15, 46, 82, 0.18);
+}
+
+.home-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 650px;
+}
+
+.home-hero-eyebrow {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #80dcff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.home-hero h1 {
+  max-width: 620px;
+  margin-bottom: 1rem;
+  font-size: clamp(2.5rem, 6vw, 4.75rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.home-hero p {
+  max-width: 570px;
+  margin-bottom: 1.75rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1.1rem;
+}
+
+.home-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 48px;
+  padding: 0.45rem 0.9rem;
+  color: #fff;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+.home-user-pill:hover,
+.home-user-pill:focus-visible {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.home-facilities-section {
+  scroll-margin-top: 1.5rem;
+}
+
+.facility-count {
+  padding: 0.55rem 0.9rem;
+  color: #315477;
+  font-weight: 700;
+  border: 1px solid #d8e7f5;
+  border-radius: 999px;
+  background: #f4f9fd;
+}
+
+.facility-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+/* Student C reporting dashboard: compact KPIs and responsive chart panels. */
+.dashboard-kpi,
+.dashboard-chart-card {
+  height: 100%;
+  border: 1px solid #e0e9f1;
+  border-radius: 1.1rem;
+  background: #fff;
+  box-shadow: 0 0.55rem 1.6rem rgba(24, 55, 87, 0.08);
+}
+
+.dashboard-kpi {
+  display: flex;
+  min-height: 132px;
+  padding: 1.25rem;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dashboard-kpi span {
+  color: #647485;
+  font-weight: 650;
+}
+
+.dashboard-kpi strong {
+  color: #173d63;
+  font-size: clamp(1.65rem, 3vw, 2.2rem);
+}
+
+.dashboard-kpi-small {
+  min-height: 108px;
+  background: #f7fbff;
+}
+
+.dashboard-chart-card {
+  padding: 1.3rem;
+}
+
+.dashboard-chart-wrap {
+  position: relative;
+  min-height: 320px;
+}
+
+.dashboard-chart-wide {
+  min-height: 360px;
+}
+
+/* Separates the public catalogue into Admin-managed Indoor and Outdoor groups. */
+.facility-type-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #e1eaf2;
+  border-radius: 1.35rem;
+  background: linear-gradient(145deg, #ffffff 0%, #f7fbff 100%);
+}
+
+.facility-type-section + .facility-type-section {
+  margin-top: 2.5rem;
+}
+
+.facility-type-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.facility-type-icon {
+  display: grid;
+  width: 3.35rem;
+  height: 3.35rem;
+  place-items: center;
+  font-size: 1.65rem;
+  border-radius: 1rem;
+  background: #e8f3ff;
+}
+
+.facility-type-label {
+  color: #0a67c7;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.facility-type-count {
+  padding: 0.45rem 0.8rem;
+  color: #315477;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 999px;
+  background: #eaf4fc;
+}
+
+.facility-showcase-card {
+  overflow: hidden;
+  border: 1px solid #e0e7ef;
+  border-radius: 1.15rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(21, 51, 83, 0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.facility-showcase-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 1rem 2.2rem rgba(21, 51, 83, 0.16);
+}
+
+.facility-card-image-wrap {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: #dce9f5;
+}
+
+.facility-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 300ms ease;
+}
+
+.facility-showcase-card:hover .facility-card-image {
+  transform: scale(1.035);
+}
+
+.facility-category-badge {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  padding: 0.4rem 0.75rem;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 750;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(7, 29, 52, 0.76);
+  backdrop-filter: blur(8px);
+}
+
+.facility-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  color: #657587;
+  font-size: 0.9rem;
+}
+
+.facility-description {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #586979;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.facility-price {
+  color: #0a58ca;
+  font-size: 1.35rem;
+}
+
+@media (max-width: 767.98px) {
+  .home-hero {
+    min-height: 390px;
+    padding: 2rem 1.4rem;
+    border-radius: 1rem;
+    background-position: 62% center;
+  }
+
+  .home-hero h1 {
+    font-size: clamp(2.35rem, 13vw, 3.5rem);
+  }
+
+  .facility-showcase-card:hover {
+    transform: none;
+  }
+
+  .facility-type-section {
+    padding: 1rem;
+  }
+
+  .facility-type-heading {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .facility-type-count {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .facility-showcase-card,
+  .facility-card-image {
+    transition: none;
+  }
+}
+
+/* Admin preview for the image displayed on public facility cards. */
+.facility-cover-preview {
+  position: relative;
+  overflow: hidden;
+  max-width: 760px;
+  aspect-ratio: 16 / 9;
+  border: 1px solid #dce5ee;
+  border-radius: 1rem;
+  background: #e8f0f6;
+  box-shadow: 0 0.6rem 1.5rem rgba(21, 51, 83, 0.1);
+}
+
+.facility-cover-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.facility-cover-preview .badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+/* ======================================================
+   BOOKING MODULE - FACILITY CARD WITH SIDE COVER
+   ====================================================== */
+.booking-facility-card {
+  overflow: hidden;
+  border: 1px solid #dde5ed;
+  border-radius: 1rem;
+  box-shadow: 0 0.45rem 1.2rem rgba(21, 51, 83, 0.08);
+}
+
+.booking-facility-card .card-body {
+  padding: 1.25rem;
+}
+
+.booking-card-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 145px;
+  align-items: start;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+}
+
+.booking-card-copy {
+  min-width: 0;
+}
+
+.booking-card-copy h2 {
+  overflow-wrap: anywhere;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.booking-card-location {
+  color: #647384;
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.booking-card-image {
+  width: 145px;
+  height: 112px;
+  object-fit: cover;
+  border: 1px solid #dce5ed;
+  border-radius: 0.8rem;
+  background: #e8f0f6;
+}
+
+.booking-card-description {
+  min-height: 3rem;
+  margin-bottom: 1rem;
+  color: #46586a;
+  line-height: 1.5;
+}
+
+.booking-card-price {
+  margin-bottom: 1rem;
+  color: #132238;
+  font-size: 1.05rem;
+  font-weight: 750;
+}
+
+.booking-card-price span {
+  color: #68798a;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+@media (max-width: 991.98px) {
+  .booking-card-main {
+    grid-template-columns: minmax(0, 1fr) 120px;
+  }
+
+  .booking-card-image {
+    width: 120px;
+    height: 98px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .booking-card-main {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-card-image {
+    grid-row: 1;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .booking-card-description {
+    min-height: auto;
+  }
+}
+
+
+/* ======================================================
+   BRAND AND HOME HERO CAROUSEL
+   ====================================================== */
+.sporthub-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 750;
+}
+
+.sporthub-brand-logo {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.home-hero {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  min-height: clamp(430px, 54vw, 610px);
+  overflow: hidden;
+  padding: 0;
+  color: #fff;
+  border-radius: 1.5rem;
+  background: #071b34;
+  box-shadow: 0 1.25rem 3rem rgba(15, 46, 82, 0.2);
+}
+
+.home-hero-slide {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  opacity: 0;
+  background-color: #071b34;
+  background-position: center;
+  background-size: cover;
+  transition: opacity 900ms ease, visibility 900ms ease;
+}
+
+.home-hero-slide.is-active {
+  z-index: 1;
+  visibility: visible;
+  opacity: 1;
+}
+
+.home-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(4, 18, 34, 0.35), rgba(4, 18, 34, 0.76)),
+    linear-gradient(90deg, rgba(4, 18, 34, 0.45), rgba(4, 18, 34, 0.18));
+}
+
+.home-hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(430px, 54vw, 610px);
+  max-width: 920px;
+  margin: 0 auto;
+  padding: clamp(3rem, 8vw, 6.5rem) clamp(1.25rem, 6vw, 5rem);
+  color: #fff;
+  text-align: center;
+}
+
+.home-hero-eyebrow {
+  margin-bottom: 1rem;
+  color: #9ee8ff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+}
+
+.home-hero h1 {
+  max-width: 860px;
+  margin-bottom: 1rem;
+  color: #fff;
+  font-size: clamp(2.7rem, 6vw, 5.3rem);
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.65);
+}
+
+.home-hero p {
+  max-width: 680px;
+  margin-bottom: 1.75rem;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  text-wrap: balance;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+}
+
+.home-hero .btn-outline-light:hover,
+.home-hero .btn-outline-light:focus-visible {
+  color: #142334;
+  background: #fff;
+}
+
+.home-hero-indicators {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 1.4rem;
+  display: flex;
+  gap: 0.55rem;
+  transform: translateX(-50%);
+}
+
+.home-hero-indicator {
+  width: 11px;
+  height: 11px;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  transition: width 180ms ease, border-radius 180ms ease, background 180ms ease;
+}
+
+.home-hero-indicator.is-active {
+  width: 30px;
+  border-radius: 999px;
+  background: #fff;
+}
+
+@media (max-width: 767.98px) {
+  .sporthub-brand-logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .home-hero {
+    min-height: 440px;
+    padding: 0;
+    border-radius: 1rem;
+  }
+
+  .home-hero-content {
+    min-height: 440px;
+  }
+
+  .home-hero h1 {
+    font-size: clamp(2.35rem, 12vw, 3.8rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-slide,
+  .home-hero-indicator {
+    transition: none;
+  }
+}
+
+
+/* Admin previews for Home banner management. */
+.hero-admin-thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #dce8f2;
+}
+
+.hero-admin-preview {
+  overflow: hidden;
+  max-width: 900px;
+  aspect-ratio: 16 / 7;
+  border: 1px solid #dce5ee;
+  border-radius: 1rem;
+  background: #dce8f2;
+  box-shadow: 0 0.6rem 1.5rem rgba(21, 51, 83, 0.1);
+}
+
+.hero-admin-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ======================================================
+   PUBLIC INFORMATION MODULE - ABOUT US AND RULES
+   ====================================================== */
+.about-hero {
+  padding: clamp(2rem, 5vw, 4.5rem);
+  color: #fff;
+  border-radius: 1.4rem;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(88, 214, 151, 0.28), transparent 35%),
+    linear-gradient(135deg, #062f25, #0b614b);
+  box-shadow: 0 1rem 2.6rem rgba(6, 47, 37, 0.18);
+}
+
+.about-hero h1 {
+  margin-bottom: 0.8rem;
+  font-size: clamp(2.4rem, 6vw, 4.7rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.about-hero p {
+  max-width: 820px;
+  margin-bottom: 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.about-eyebrow {
+  color: #8cf0bf;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.about-card {
+  padding: 1.65rem;
+  border: 1px solid #dfe9e4;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 0.45rem 1.4rem rgba(24, 66, 49, 0.07);
+}
+
+.about-card h2 {
+  margin-bottom: 1rem;
+  color: #124a3a;
+  font-size: 1.3rem;
+  font-weight: 750;
+}
+
+.about-card p,
+.about-card li,
+.about-notice p {
+  color: #53645d;
+  line-height: 1.7;
+}
+
+.about-card li + li {
+  margin-top: 0.45rem;
+}
+
+.about-notice {
+  padding: 1.4rem 1.6rem;
+  border-left: 0.35rem solid #198754;
+  border-radius: 0.75rem;
+  background: #effaf4;
+}
+
+/* ======================================================
+   STUDENT C PAYMENT MODULE - INVOICE AND CHECKOUT
+   ====================================================== */
+.payment-invoice-card,
+.payment-checkout-card {
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid #dbe9e1;
+  border-top: 0.4rem solid #198754;
+  border-radius: 1.2rem;
+  background: linear-gradient(150deg, #ffffff 65%, #f0faf4 100%);
+  box-shadow: 0 1rem 2.8rem rgba(20, 73, 45, 0.11);
+}
+
+.payment-invoice-card dt,
+.payment-checkout-card label {
+  color: #244f3b;
+  font-weight: 700;
+}
+
+/* ======================================================
+   UI/UX BOSS - GLOBAL SPORTHUB DESIGN SYSTEM
+   Shared colours, navigation, controls, tables, cards and motion.
+   ====================================================== */
+:root {
+  --sporthub-green-950: #0c3520;
+  --sporthub-green-900: #12472b;
+  --sporthub-green-800: #155c36;
+  --sporthub-green-700: #187044;
+  --sporthub-green-600: #218b55;
+  --sporthub-green-50: #f0f8f3;
+  --sporthub-ink: #173128;
+  --sporthub-muted: #66766f;
+  --sporthub-surface: #ffffff;
+  --sporthub-canvas: #f5f8f6;
+  --sporthub-border: #dfe8e2;
+  --sporthub-shadow-sm: 0 0.35rem 1rem rgba(20, 62, 39, 0.07);
+  --sporthub-shadow-md: 0 0.9rem 2.4rem rgba(20, 62, 39, 0.11);
+  --sporthub-radius: 1rem;
+}
+
+html { scroll-behavior: smooth; }
+
+body.sporthub-site {
+  display: flex;
+  min-height: 100vh;
+  margin-bottom: 0;
+  flex-direction: column;
+  color: var(--sporthub-ink);
+  background: radial-gradient(circle at 8% 4%, rgba(69, 173, 104, 0.08), transparent 24rem), var(--sporthub-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+.sporthub-site a { text-underline-offset: 0.18em; }
+
+.site-header {
+  position: sticky;
+  z-index: 1030;
+  top: 0;
+}
+
+.site-navbar {
+  min-height: 76px;
+  border-bottom: 1px solid rgba(25, 87, 51, 0.1);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0.3rem 1.3rem rgba(18, 71, 43, 0.05);
+  backdrop-filter: blur(16px);
+  transition: box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.site-header.is-scrolled .site-navbar {
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 0.65rem 1.8rem rgba(18, 71, 43, 0.1);
+}
+
+.site-nav-container {
+  max-width: 1480px;
+  padding-inline: clamp(1rem, 3vw, 2.5rem);
+}
+
+.sporthub-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-right: clamp(1rem, 2.5vw, 2.4rem);
+  color: var(--sporthub-green-900) !important;
+  font-size: 1.35rem;
+  font-weight: 850;
+  letter-spacing: -0.035em;
+}
+
+.sporthub-brand-logo {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border: 2px solid rgba(33, 139, 85, 0.2);
+  border-radius: 50%;
+  box-shadow: 0 0.35rem 0.9rem rgba(24, 112, 68, 0.14);
+}
+
+.site-navbar .nav-link {
+  margin: 0.15rem;
+  padding: 0.62rem 0.82rem !important;
+  color: #3e5149;
+  font-weight: 620;
+  border: 0;
+  border-radius: 0.7rem;
+  background: transparent;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.site-navbar .nav-link:hover,
+.site-navbar .nav-link:focus-visible,
+.site-navbar .nav-link.active {
+  color: var(--sporthub-green-800);
+  background: var(--sporthub-green-50);
+}
+
+.site-navbar .nav-link.active { box-shadow: inset 0 -2px 0 var(--sporthub-green-600); }
+.site-login-button { min-width: 90px; margin-left: 0.35rem; }
+
+.site-profile-trigger {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.3rem;
+  text-align: left;
+}
+
+.site-profile-copy {
+  display: grid;
+  margin-inline: 0.15rem 0.25rem;
+  line-height: 1.15;
+}
+
+.site-profile-copy small { color: var(--sporthub-muted); font-size: 0.67rem; font-weight: 500; }
+.site-profile-copy strong { max-width: 150px; overflow: hidden; font-size: 0.88rem; text-overflow: ellipsis; white-space: nowrap; }
+
+.site-admin-menu,
+.site-profile-menu {
+  min-width: 230px;
+  padding: 0.55rem;
+  border: 1px solid var(--sporthub-border);
+  border-radius: 0.9rem;
+  box-shadow: var(--sporthub-shadow-md);
+}
+
+.site-admin-menu .dropdown-item,
+.site-profile-menu .dropdown-item { padding: 0.65rem 0.75rem; border-radius: 0.6rem; }
+
+.site-admin-menu .dropdown-item:hover,
+.site-profile-menu .dropdown-item:hover { color: var(--sporthub-green-800); background: var(--sporthub-green-50); }
+
+.site-main-shell { width: 100%; max-width: 1480px; flex: 1 0 auto; }
+.site-main-content { min-height: 65vh; padding-block: clamp(1.5rem, 3vw, 2.75rem) 4rem; }
+
+.site-footer { margin-top: auto; color: #cfe0d5; background: var(--sporthub-green-950); }
+
+.site-footer-inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 112px;
+}
+
+.site-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.site-footer-brand:hover { color: #fff; }
+.site-footer-brand img { width: 36px; height: 36px; object-fit: cover; border-radius: 50%; }
+.site-footer p { color: #a9c4b4; text-align: center; }
+.site-footer-links { display: flex; gap: 1rem; }
+.site-footer-links a { color: #dcebe1; text-decoration: none; }
+.site-footer-links a:hover { color: #fff; text-decoration: underline; }
+
+.sporthub-site .btn {
+  padding: 0.62rem 1rem;
+  font-weight: 680;
+  border-radius: 0.72rem;
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+}
+
+.sporthub-site .btn:hover { transform: translateY(-1px); }
+
+.sporthub-site .btn-primary {
+  border-color: var(--sporthub-green-700);
+  background: var(--sporthub-green-700);
+  box-shadow: 0 0.35rem 0.8rem rgba(24, 112, 68, 0.18);
+}
+
+.sporthub-site .btn-primary:hover,
+.sporthub-site .btn-primary:focus-visible { border-color: var(--sporthub-green-800); background: var(--sporthub-green-800); }
+
+.sporthub-site .btn-outline-primary { color: var(--sporthub-green-700); border-color: var(--sporthub-green-700); }
+.sporthub-site .btn-outline-primary:hover,
+.sporthub-site .btn-outline-primary:focus-visible { color: #fff; border-color: var(--sporthub-green-700); background: var(--sporthub-green-700); }
+.sporthub-site .text-primary { color: var(--sporthub-green-700) !important; }
+
+.sporthub-site .card,
+.sporthub-site .table-responsive { border-color: var(--sporthub-border) !important; border-radius: var(--sporthub-radius) !important; }
+.sporthub-site .card:not(.facility-showcase-card):not(.home-hero-slide) { box-shadow: var(--sporthub-shadow-sm); }
+.sporthub-site .table { --bs-table-bg: transparent; --bs-table-hover-bg: var(--sporthub-green-50); }
+
+.sporthub-site .table > thead th {
+  padding-block: 0.9rem;
+  color: #53665d;
+  font-size: 0.78rem;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  border-bottom-color: var(--sporthub-border);
+}
+
+.sporthub-site .table > tbody td { padding-block: 0.9rem; border-color: #e8eee9; }
+
+.sporthub-site .form-control,
+.sporthub-site .form-select {
+  min-height: 45px;
+  border-color: #cfddd4;
+  border-radius: 0.72rem;
+  background-color: #fff;
+}
+
+.sporthub-site textarea.form-control { min-height: 120px; }
+.sporthub-site .form-control:focus,
+.sporthub-site .form-select:focus { border-color: var(--sporthub-green-600); box-shadow: 0 0 0 0.22rem rgba(33, 139, 85, 0.14); }
+.sporthub-site .form-label { color: #34483f; font-weight: 680; }
+
+.sporthub-site .alert {
+  border-width: 0 0 0 4px;
+  border-radius: 0.8rem;
+  box-shadow: var(--sporthub-shadow-sm);
+}
+
+.sporthub-site h1,
+.sporthub-site h2,
+.sporthub-site h3,
+.sporthub-site h4 { color: #172d25; letter-spacing: -0.025em; }
+
+/* Home keeps strong white copy over Admin-uploaded banner images. */
+.sporthub-site .home-hero h1 { color: #fff; }
+.sporthub-site .home-hero-eyebrow { color: #a6efbd; }
+.sporthub-site .facility-type-label,
+.sporthub-site .facility-price { color: var(--sporthub-green-700); }
+.sporthub-site .facility-count,
+.sporthub-site .facility-type-count {
+  color: var(--sporthub-green-800);
+  border-color: #cfe6d7;
+  background: var(--sporthub-green-50);
+}
+.sporthub-site .facility-type-icon { background: var(--sporthub-green-100); }
+.sporthub-site .facility-type-section { border-color: var(--sporthub-border); background: linear-gradient(145deg, #fff 0%, #f4faf6 100%); }
+.sporthub-site .facility-showcase-card:hover,
+.sporthub-site .booking-facility-card:hover { border-color: #bcdcc8; }
+
+.ui-reveal { opacity: 0; transform: translateY(12px); }
+.ui-reveal.is-visible { opacity: 1; transform: none; transition: opacity 430ms ease, transform 430ms ease; }
+
+@media (max-width: 991.98px) {
+  .site-navbar { min-height: 68px; }
+
+  .site-navbar .navbar-collapse {
+    max-height: calc(100vh - 82px);
+    margin-top: 0.8rem;
+    padding: 0.75rem;
+    overflow-y: auto;
+    border: 1px solid var(--sporthub-border);
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: var(--sporthub-shadow-md);
+  }
+
+  .site-navbar .nav-link,
+  .site-login-button { width: 100%; margin: 0.1rem 0; text-align: left; }
+  .site-profile-trigger { justify-content: flex-start; }
+  .site-profile-copy strong { max-width: 230px; }
+  .site-admin-menu,
+  .site-profile-menu { border: 0; box-shadow: none; }
+
+  .site-footer-inner {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0.8rem;
+    padding-block: 1.8rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .site-main-content { padding-top: 1rem; }
+  .site-footer-links { flex-wrap: wrap; justify-content: center; }
+  .sporthub-site .display-6 { font-size: calc(1.45rem + 1.8vw); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .sporthub-site *, .sporthub-site *::before, .sporthub-site *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .ui-reveal { opacity: 1; transform: none; }
+}

@@ -1,0 +1,143 @@
+@*
+========================================
+STUDENT A CORE - ADMIN USER LIST
+========================================
+*@
+@using SportHub.Models
+@model SportHub.ViewModels.AdminUserIndexViewModel
+
+@{
+    ViewData["Title"] = "User management";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+        <span class="text-primary fw-semibold text-uppercase small">
+            Security &amp; users
+        </span>
+        <h1 class="h2 mb-1">User management</h1>
+        <p class="text-muted mb-0">
+            Search accounts, review access and respond to lockouts.
+        </p>
+    </div>
+    <span class="badge rounded-pill text-bg-light border px-3 py-2">
+        @Model.Users.Count account(s)
+    </span>
+</div>
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success">@successMessage</div>
+}
+
+<form method="get"
+      class="card card-body border-0 shadow-sm mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-lg-5">
+            <label asp-for="Search" class="form-label">Name or email</label>
+            <input asp-for="Search"
+                   class="form-control"
+                   placeholder="Search users" />
+        </div>
+        <div class="col-md-4 col-lg-2">
+            <label asp-for="Role" class="form-label"></label>
+            <select asp-for="Role" class="form-select">
+                <option value="">All roles</option>
+                <option value="@UserRoles.Admin">Admin</option>
+                <option value="@UserRoles.Member">Member</option>
+            </select>
+        </div>
+        <div class="col-md-4 col-lg-2">
+            <label asp-for="IsActive" class="form-label">Status</label>
+            <select asp-for="IsActive" class="form-select">
+                <option value="">All statuses</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+        </div>
+        <div class="col-md-4 col-lg-3 d-flex gap-2">
+            <button class="btn btn-primary flex-fill" type="submit">Filter</button>
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">Clear</a>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive rounded-3 border bg-white shadow-sm">
+    <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+            <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Reservations</th>
+                <th>Security</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (Model.Users.Count == 0)
+        {
+            <tr>
+                <td colspan="6" class="text-center text-muted py-5">
+                    No accounts match the selected filters.
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var user in Model.Users)
+            {
+                var isLocked =
+                    user.LockoutEnd.HasValue &&
+                    user.LockoutEnd.Value > DateTime.UtcNow;
+
+                <tr>
+                    <td>
+                        <div class="fw-semibold">@user.FullName</div>
+                        <div class="small text-muted">@user.Email</div>
+                        <span class="badge mt-1 @(user.EmailConfirmed ? "text-bg-success" : "text-bg-warning")">
+                            @(user.EmailConfirmed ? "Email verified" : "Email pending")
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge @(user.Role == UserRoles.Admin ? "text-bg-primary" : "text-bg-info")">
+                            @user.Role
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge @(user.IsActive ? "text-bg-success" : "text-bg-secondary")">
+                            @(user.IsActive ? "Active" : "Inactive")
+                        </span>
+                    </td>
+                    <td>@user.ReservationCount</td>
+                    <td>
+                        @if (isLocked)
+                        {
+                            <span class="badge text-bg-danger">Locked</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted small">
+                                @user.FailedLoginAttempts failed attempt(s)
+                            </span>
+                        }
+                    </td>
+                    <td class="text-end text-nowrap">
+                        <a asp-action="Details"
+                           asp-route-id="@user.UserId"
+                           class="btn btn-sm btn-outline-secondary">
+                            Details
+                        </a>
+                        <a asp-action="Edit"
+                           asp-route-id="@user.UserId"
+                           class="btn btn-sm btn-outline-primary">
+                            Edit
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

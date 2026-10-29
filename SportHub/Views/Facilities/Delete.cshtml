@@ -1,0 +1,68 @@
+@*
+========================================
+FACILITY MODULE - DELETE FACILITY PAGE
+========================================
+*@
+
+@model Facility
+
+@{
+    ViewData["Title"] = "Delete facility";
+
+    var hasRelatedRecords =
+        Model.FacilityImages.Count > 0 ||
+        Model.Reservations.Count > 0 ||
+        Model.MaintenanceBlocks.Count > 0;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="h2">Delete facility</h1>
+
+        @if (hasRelatedRecords)
+        {
+            <div class="alert alert-warning" role="alert">
+                This facility has related records. Confirming will deactivate it instead of
+                permanently deleting it, so its operational history remains available.
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">
+                This facility has no related records. Confirming will permanently delete it.
+            </div>
+        }
+
+        <dl class="row">
+            <dt class="col-sm-4">Name</dt>
+            <dd class="col-sm-8">@Model.Name</dd>
+
+            <dt class="col-sm-4">Category</dt>
+            <dd class="col-sm-8">@Model.FacilityCategory.Name</dd>
+
+            <dt class="col-sm-4">Location</dt>
+            <dd class="col-sm-8">@Model.Location</dd>
+
+            <dt class="col-sm-4">Facility type</dt>
+            <dd class="col-sm-8">@Model.FacilityType</dd>
+
+            <dt class="col-sm-4">Images</dt>
+            <dd class="col-sm-8">@Model.FacilityImages.Count</dd>
+
+            <dt class="col-sm-4">Reservations</dt>
+            <dd class="col-sm-8">@Model.Reservations.Count</dd>
+
+            <dt class="col-sm-4">Maintenance blocks</dt>
+            <dd class="col-sm-8">@Model.MaintenanceBlocks.Count</dd>
+        </dl>
+
+        <form asp-action="Delete"
+              asp-route-id="@Model.FacilityId"
+              method="post">
+            <button type="submit" class="btn btn-danger">
+                @(hasRelatedRecords ? "Deactivate facility" : "Delete permanently")
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

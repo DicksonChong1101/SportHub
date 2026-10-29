@@ -1,0 +1,100 @@
+@*
+========================================
+STUDENT A CORE - ADMIN USER DETAILS
+========================================
+*@
+@using SportHub.Models
+@model SportHub.Models.User
+
+@{
+    ViewData["Title"] = "User details";
+    var isLocked =
+        Model.LockoutEnd.HasValue &&
+        Model.LockoutEnd.Value > DateTime.UtcNow;
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <span class="text-primary fw-semibold text-uppercase small">
+            User account
+        </span>
+        <h1 class="h2 mb-1">@Model.FullName</h1>
+        <p class="text-muted mb-0">@Model.Email</p>
+    </div>
+    <div class="d-flex gap-2">
+        <span class="badge text-bg-primary align-self-center">@Model.Role</span>
+        <span class="badge @(Model.IsActive ? "text-bg-success" : "text-bg-secondary") align-self-center">
+            @(Model.IsActive ? "Active" : "Inactive")
+        </span>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success">@successMessage</div>
+}
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+        <dl class="row mb-0">
+            <dt class="col-sm-4">Phone number</dt>
+            <dd class="col-sm-8">@(Model.PhoneNumber ?? "—")</dd>
+
+            <dt class="col-sm-4">Email verification</dt>
+            <dd class="col-sm-8">
+                <span class="badge @(Model.EmailConfirmed ? "text-bg-success" : "text-bg-warning")">
+                    @(Model.EmailConfirmed ? "Verified" : "Pending activation")
+                </span>
+            </dd>
+
+            <dt class="col-sm-4">Member since</dt>
+            <dd class="col-sm-8">@Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")</dd>
+
+            <dt class="col-sm-4">Last login</dt>
+            <dd class="col-sm-8">
+                @(Model.LastLoginAt?.ToLocalTime().ToString("dd MMM yyyy HH:mm") ?? "Never")
+            </dd>
+
+            <dt class="col-sm-4">Reservations</dt>
+            <dd class="col-sm-8">@Model.Reservations.Count</dd>
+
+            <dt class="col-sm-4">Login audit records</dt>
+            <dd class="col-sm-8">@Model.LoginAttempts.Count</dd>
+
+            <dt class="col-sm-4">Failed attempts</dt>
+            <dd class="col-sm-8">@Model.FailedLoginAttempts</dd>
+
+            <dt class="col-sm-4">Lockout</dt>
+            <dd class="col-sm-8">
+                @(isLocked
+                    ? $"Until {Model.LockoutEnd!.Value.ToLocalTime():dd MMM yyyy HH:mm}"
+                    : "Not locked")
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="d-flex flex-wrap gap-2">
+    <a asp-action="Edit"
+       asp-route-id="@Model.UserId"
+       class="btn btn-primary">
+        Edit account
+    </a>
+
+    @if (isLocked || Model.FailedLoginAttempts > 0)
+    {
+        <form asp-action="Unlock"
+              asp-route-id="@Model.UserId"
+              method="post">
+            <button type="submit"
+                    class="btn btn-outline-warning">
+                Clear lockout
+            </button>
+        </form>
+    }
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Back to users
+    </a>
+</div>

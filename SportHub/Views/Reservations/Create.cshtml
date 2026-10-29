@@ -1,0 +1,175 @@
+@*
+========================================
+MEMBER RESERVATION MODULE - CREATE RESERVATION PAGE
+========================================
+*@
+
+@model SportHub.ViewModels.ReservationCreateViewModel
+
+@{
+    ViewData["Title"] = "Create reservation";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h2">Create reservation</h1>
+
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="FacilityId" class="form-label"></label>
+                <select asp-for="FacilityId" asp-items="Model.FacilityOptions" class="form-select">
+                    <option value="">Select a facility</option>
+                </select>
+                <span asp-validation-for="FacilityId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ReservationDate" class="form-label"></label>
+                <input asp-for="ReservationDate" class="form-control" type="date"
+                       min="@Model.MinimumReservationDate.ToString("yyyy-MM-dd")"
+                       max="@Model.MaximumReservationDate.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="ReservationDate" class="text-danger"></span>
+                <div class="form-text">
+                    Booking is available from today until Sunday,
+                    @Model.MaximumReservationDate.ToString("dd MMM yyyy") (Malaysia time).
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TimeSlotId" class="form-label"></label>
+                <select asp-for="TimeSlotId" asp-items="Model.TimeSlotOptions" class="form-select">
+                    <option value="">Select a time slot</option>
+                </select>
+                <span asp-validation-for="TimeSlotId" class="text-danger"></span>
+                <div id="availabilityMessage" class="form-text" aria-live="polite">
+                    Select a facility and date to check live availability.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ParticipantCount" class="form-label"></label>
+                <input asp-for="ParticipantCount" class="form-control"
+                       type="number" min="1" step="1" />
+                <span asp-validation-for="ParticipantCount" class="text-danger"></span>
+                <div id="participantCapacityMessage" class="form-text" aria-live="polite">
+                    Select a facility to view its maximum capacity.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label"></label>
+                <textarea asp-for="Notes" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create reservation</button>
+            <a asp-controller="Booking" asp-action="Index"
+               class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // =====================================================
+        // STUDENT B ADDITIONAL FEATURE - AJAX LIVE AVAILABILITY
+        // Refreshes time slots without reloading the booking page.
+        // =====================================================
+        (() => {
+            const facilityInput = document.getElementById("FacilityId");
+            const dateInput = document.getElementById("ReservationDate");
+            const timeSlotInput = document.getElementById("TimeSlotId");
+            const message = document.getElementById("availabilityMessage");
+            const participantInput = document.getElementById("ParticipantCount");
+            const capacityMessage = document.getElementById("participantCapacityMessage");
+            const facilityCapacities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.FacilityCapacities));
+            const endpoint = "@Url.Action("AvailableTimeSlots", "Reservations")";
+
+            if (!facilityInput || !dateInput || !timeSlotInput || !message) {
+                return;
+            }
+
+            const refreshAvailability = async () => {
+                const facilityId = facilityInput.value;
+                const reservationDate = dateInput.value;
+
+                if (!facilityId || !reservationDate) {
+                    message.textContent = "Select a facility and date to check live availability.";
+                    return;
+                }
+
+                const previousSelection = timeSlotInput.value;
+                timeSlotInput.disabled = true;
+                message.textContent = "Checking available time slots...";
+
+                try {
+                    const query = new URLSearchParams({ facilityId, reservationDate });
+                    const response = await fetch(`${endpoint}?${query.toString()}`, {
+                        headers: { "X-Requested-With": "XMLHttpRequest" }
+                    });
+
+                    if (!response.ok) {
+                        const problem = await response.json().catch(() => null);
+                        throw new Error(problem?.message ?? "Availability request failed.");
+                    }
+
+                    const result = await response.json();
+                    timeSlotInput.replaceChildren(new Option("Select a time slot", ""));
+
+                    result.timeSlots.forEach(slot => {
+                        const label = slot.isAvailable
+                            ? slot.text
+                            : `${slot.text} — ${slot.reason}`;
+                        const option = new Option(label, slot.timeSlotId);
+                        option.disabled = !slot.isAvailable;
+                        option.selected = slot.isAvailable && String(slot.timeSlotId) === previousSelection;
+                        timeSlotInput.add(option);
+                    });
+
+                    message.textContent = result.availableCount > 0
+                        ? `${result.availableCount} time slot(s) available.`
+                        : "No time slots are available for this date.";
+                    message.className = result.availableCount > 0
+                        ? "form-text text-success"
+                        : "form-text text-danger";
+                } catch (error) {
+                    message.textContent = error.message ?? "Availability could not be loaded. Please retry.";
+                    message.className = "form-text text-danger";
+                } finally {
+                    timeSlotInput.disabled = false;
+                }
+            };
+
+            facilityInput.addEventListener("change", refreshAvailability);
+            dateInput.addEventListener("change", refreshAvailability);
+
+            const refreshParticipantCapacity = () => {
+                if (!participantInput || !capacityMessage) {
+                    return;
+                }
+
+                const capacity = facilityCapacities[facilityInput.value];
+
+                if (!capacity) {
+                    participantInput.removeAttribute("max");
+                    capacityMessage.textContent = "Select a facility to view its maximum capacity.";
+                    return;
+                }
+
+                participantInput.max = String(capacity);
+                capacityMessage.textContent = `Maximum ${capacity} participant(s) for this facility.`;
+
+                if (Number(participantInput.value) > capacity) {
+                    participantInput.value = String(capacity);
+                }
+            };
+
+            facilityInput.addEventListener("change", refreshParticipantCapacity);
+            refreshParticipantCapacity();
+            refreshAvailability();
+        })();
+    </script>
+}

@@ -1,0 +1,42 @@
+@*
+========================================
+STUDENT A ADDITIONAL - EMAIL ACTIVATION RESULT
+========================================
+*@
+
+@{
+    ViewData["Title"] = "Account activation";
+    var activationSucceeded = ViewData["ActivationSucceeded"] as bool? == true;
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4 p-md-5 text-center">
+                @if (activationSucceeded)
+                {
+                    <div class="display-5 text-success mb-3" aria-hidden="true">&#10003;</div>
+                    <h1 class="h2 mb-3">Email verified</h1>
+                    <p class="text-muted">
+                        Your SportHub account is now active. You can sign in and
+                        start reserving facilities.
+                    </p>
+                    <a asp-action="Login" class="btn btn-primary mt-3">Sign in</a>
+                }
+                else
+                {
+                    <div class="display-5 text-warning mb-3" aria-hidden="true">!</div>
+                    <h1 class="h2 mb-3">Activation link unavailable</h1>
+                    <p class="text-muted">
+                        This link is invalid, expired, or has already been used.
+                        Request a new activation email to continue.
+                    </p>
+                    <a asp-action="ResendActivation"
+                       class="btn btn-primary mt-3">
+                        Send a new link
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

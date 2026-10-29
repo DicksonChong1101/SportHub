@@ -1,0 +1,168 @@
+@*
+========================================
+MEMBER RESERVATION MODULE - RESERVATION DETAILS PAGE
+========================================
+*@
+
+@model Reservation
+
+@{
+    ViewData["Title"] = "Reservation details";
+
+    var statusBadgeClass = Model.Status switch
+    {
+        ReservationStatuses.Pending => "bg-warning text-dark",
+        ReservationStatuses.Approved => "bg-success",
+        ReservationStatuses.Rejected => "bg-danger",
+        ReservationStatuses.Completed => "bg-primary",
+        _ => "bg-secondary"
+    };
+    var paymentStatus = Model.Payment?.Status ?? PaymentStatuses.Unpaid;
+    var paymentBadgeClass = paymentStatus switch
+    {
+        PaymentStatuses.PendingVerification => "bg-warning text-dark",
+        PaymentStatuses.Paid => "bg-success",
+        PaymentStatuses.Failed => "bg-danger",
+        PaymentStatuses.Refunded => "bg-info text-dark",
+        _ => "bg-secondary"
+    };
+}
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="alert">@successMessage</div>
+}
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+<h1 class="h2">Reservation details</h1>
+
+@* Shows the Admin explanation directly to the reservation owner. *@
+@if (Model.Status == ReservationStatuses.Rejected)
+{
+    <div class="alert alert-danger" role="alert">
+        <strong>Reservation rejected by Admin.</strong><br />
+        <span>Reason: @(Model.RejectionReason ?? "No rejection reason was provided.")</span>
+    </div>
+}
+
+<div class="row g-4 align-items-start">
+<div class="col-lg-8">
+<dl class="row mb-0">
+    <dt class="col-sm-4">Reservation number</dt>
+    <dd class="col-sm-8">@Model.ReservationNumber</dd>
+    <dt class="col-sm-4">Facility</dt>
+    <dd class="col-sm-8">@Model.Facility.Name</dd>
+    <dt class="col-sm-4">Category</dt>
+    <dd class="col-sm-8">@Model.Facility.FacilityCategory.Name</dd>
+    <dt class="col-sm-4">Date</dt>
+    <dd class="col-sm-8">@Model.ReservationDate.ToString("dd MMM yyyy")</dd>
+    <dt class="col-sm-4">Time</dt>
+    <dd class="col-sm-8">@Model.TimeSlot.DisplayText</dd>
+    <dt class="col-sm-4">Participants</dt>
+    <dd class="col-sm-8">@Model.ParticipantCount / @Model.Facility.Capacity maximum</dd>
+    <dt class="col-sm-4">Status</dt>
+    <dd class="col-sm-8"><span class="badge @statusBadgeClass">@Model.Status</span></dd>
+    <dt class="col-sm-4">Total amount</dt>
+    <dd class="col-sm-8">RM @Model.TotalAmount.ToString("N2")</dd>
+    <dt class="col-sm-4">Payment status</dt>
+    <dd class="col-sm-8"><span class="badge @paymentBadgeClass">@paymentStatus</span></dd>
+    @if (Model.Payment is not null)
+    {
+        <dt class="col-sm-4">Invoice number</dt>
+        <dd class="col-sm-8">@(Model.Payment.InvoiceNumber ?? "Not issued")</dd>
+        <dt class="col-sm-4">Payment method</dt>
+        <dd class="col-sm-8">@Model.Payment.Method</dd>
+        <dt class="col-sm-4">Payment reference</dt>
+        <dd class="col-sm-8">@(Model.Payment.TransactionReference ?? "Not submitted")</dd>
+        <dt class="col-sm-4">Account</dt>
+        <dd class="col-sm-8">•••• @(Model.Payment.PayerAccountLastFour ?? "----")</dd>
+        <dt class="col-sm-4">Receipt number</dt>
+        <dd class="col-sm-8">@(Model.Payment.ReceiptNumber ?? "Not issued")</dd>
+    }
+    <dt class="col-sm-4">Notes</dt>
+    <dd class="col-sm-8">@(Model.Notes ?? "None")</dd>
+</dl>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.QrToken) &&
+     Model.Payment?.Status is PaymentStatuses.PendingVerification or PaymentStatuses.Paid &&
+     Model.Status is not ReservationStatuses.Cancelled and not ReservationStatuses.Rejected)
+{
+    <div class="col-lg-4">
+        <section class="reservation-pass-card text-center">
+            <span class="badge bg-success mb-2">Payment submitted</span>
+            <h2 class="h5">Scan at check-in</h2>
+            <img src="@Url.Action("QrCode", new { id = Model.ReservationId })"
+                 alt="QR pass for reservation @Model.ReservationNumber"
+                 class="reservation-qr-code" />
+            <p class="small text-muted mb-0">@Model.ReservationNumber</p>
+            <a asp-action="Pass" asp-route-token="@Model.QrToken"
+               target="_blank" rel="noopener"
+               class="btn btn-sm btn-outline-success mt-3">
+                Test pass on this device
+            </a>
+        </section>
+    </div>
+}
+</div>
+
+@{
+    var reservationStart = Model.ReservationDate.ToDateTime(Model.TimeSlot.StartTime);
+    var canCancel = reservationStart > SportHub.Services.MalaysiaClock.Now &&
+                    Model.Status is ReservationStatuses.Pending or ReservationStatuses.Approved &&
+                    Model.Payment?.Status is not
+                        (PaymentStatuses.PendingVerification or PaymentStatuses.Paid);
+    var canPay = Model.Status == ReservationStatuses.Pending &&
+                 (Model.Payment is null ||
+                  Model.Payment.Status is PaymentStatuses.Unpaid or PaymentStatuses.Failed);
+}
+
+@if (paymentStatus == PaymentStatuses.PendingVerification)
+{
+    <div class="alert alert-warning mt-3">
+        Payment submitted successfully. Please wait for Admin verification and reservation approval.
+    </div>
+}
+else if (paymentStatus == PaymentStatuses.Paid &&
+         Model.Status is ReservationStatuses.Approved or ReservationStatuses.Completed)
+{
+    <div class="alert alert-success mt-3">
+        Payment verified and reservation approved successfully.
+    </div>
+    <a asp-controller="Payments" asp-action="Receipt"
+       asp-route-reservationId="@Model.ReservationId"
+       class="btn btn-success">Download PDF receipt</a>
+}
+else if (paymentStatus == PaymentStatuses.Refunded &&
+         Model.Status == ReservationStatuses.Rejected)
+{
+    <div class="alert alert-info mt-3" role="alert">
+        Your submitted payment of RM @Model.Payment!.Amount.ToString("N2") has been refunded.
+        Download the PDF confirmation for your records.
+    </div>
+    <a asp-controller="Payments" asp-action="RefundNotice"
+       asp-route-reservationId="@Model.ReservationId"
+       class="btn btn-info">Download PDF refund confirmation</a>
+}
+
+@if (canPay)
+{
+    <a asp-controller="Payments" asp-action="Invoice"
+       asp-route-reservationId="@Model.ReservationId"
+       class="btn btn-success">View invoice and pay</a>
+}
+@if (canCancel)
+{
+    <a asp-action="Cancel" asp-route-id="@Model.ReservationId"
+       class="btn btn-danger">Cancel reservation</a>
+}
+@if (Model.Status is not ReservationStatuses.Cancelled and not ReservationStatuses.Rejected)
+{
+    <a asp-action="Calendar" asp-route-id="@Model.ReservationId"
+       class="btn btn-outline-primary">Add to calendar</a>
+}
+<a asp-action="Index" class="btn btn-outline-secondary">Back to my reservations</a>

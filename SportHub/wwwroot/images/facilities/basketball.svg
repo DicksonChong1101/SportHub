@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title">
+  <title id="title">Basketball facility</title>
+  <defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#f39a35"/><stop offset="1" stop-color="#9d3c28"/></linearGradient></defs>
+  <rect width="800" height="500" fill="url(#g)"/>
+  <g fill="none" stroke="#ffe4bd" stroke-width="8" opacity=".65">
+    <path d="M0 250h800M400 0v500"/>
+    <circle cx="400" cy="250" r="112"/>
+    <path d="M0 100h155a150 150 0 010 300H0M800 100H645a150 150 0 000 300h155"/>
+  </g>
+  <g transform="translate(555 235)">
+    <circle r="125" fill="#ff9f32" stroke="#5b291d" stroke-width="10"/>
+    <path d="M-125 0h250M0-125c-55 55-55 195 0 250M0-125c55 55 55 195 0 250" fill="none" stroke="#5b291d" stroke-width="10"/>
+  </g>
+</svg>

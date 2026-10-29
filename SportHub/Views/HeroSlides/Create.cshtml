@@ -1,0 +1,36 @@
+@*
+========================================
+HOME HERO MODULE - CREATE BANNER
+========================================
+*@
+
+@model SportHub.ViewModels.HeroSlideFormViewModel
+
+@{
+    ViewData["Title"] = "Add Home banner";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="h2">Add Home banner</h1>
+        <p class="text-muted">
+            Add a background and message to the 20-second Home slideshow.
+        </p>
+
+        <form asp-action="Create"
+              asp-antiforgery="false"
+              method="post"
+              enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <partial name="_Form" model="Model" />
+
+            <button type="submit" class="btn btn-primary">Create banner</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/hero-image-upload.js" asp-append-version="true"></script>
+}

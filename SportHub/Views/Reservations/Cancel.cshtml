@@ -1,0 +1,50 @@
+@*
+========================================
+MEMBER RESERVATION MODULE - CANCEL RESERVATION PAGE
+========================================
+*@
+
+@model SportHub.ViewModels.ReservationCancelViewModel
+
+@{
+    ViewData["Title"] = "Cancel reservation";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h2">Cancel reservation</h1>
+        <div class="alert alert-warning" role="alert">
+            Confirm that you want to cancel this reservation. This action cannot be undone.
+        </div>
+
+        <dl class="row">
+            <dt class="col-sm-4">Reservation</dt>
+            <dd class="col-sm-8">@Model.ReservationNumber</dd>
+            <dt class="col-sm-4">Facility</dt>
+            <dd class="col-sm-8">@Model.FacilityName</dd>
+            <dt class="col-sm-4">Date</dt>
+            <dd class="col-sm-8">@Model.ReservationDate.ToString("dd MMM yyyy")</dd>
+            <dt class="col-sm-4">Time</dt>
+            <dd class="col-sm-8">@Model.TimeSlotText</dd>
+        </dl>
+
+        <form asp-action="Cancel" method="post">
+            <input asp-for="ReservationId" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="CancellationReason" class="form-label"></label>
+                <textarea asp-for="CancellationReason" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="CancellationReason" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-danger">Confirm cancellation</button>
+            <a asp-action="Details" asp-route-id="@Model.ReservationId"
+               class="btn btn-outline-secondary">Keep reservation</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

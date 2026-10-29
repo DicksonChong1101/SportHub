@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 700" role="img" aria-labelledby="title desc">
+  <title id="title">SportHub indoor sports arena</title>
+  <desc id="desc">An abstract blue indoor court with stadium lights and sports equipment</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#133b67"/>
+      <stop offset="1" stop-color="#071b32"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a84a9"/>
+      <stop offset="1" stop-color="#07516e"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#83e6ff" stop-opacity=".75"/>
+      <stop offset="1" stop-color="#83e6ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="700" fill="url(#sky)"/>
+  <circle cx="1240" cy="175" r="360" fill="url(#glow)"/>
+  <path d="M500 380L1600 270v430H250z" fill="url(#floor)"/>
+  <g fill="none" stroke="#b8f1ff" stroke-width="7" opacity=".7">
+    <path d="M500 380L250 700M905 340L800 700M1300 300L1450 700"/>
+    <path d="M360 545L1540 455M290 650L1590 555"/>
+    <ellipse cx="1040" cy="510" rx="190" ry="115"/>
+  </g>
+  <g transform="translate(1210 235)">
+    <circle cx="0" cy="0" r="105" fill="#f68b2c"/>
+    <path d="M-100 8h200M0-105c-43 50-43 160 0 210M0-105c43 50 43 160 0 210" fill="none" stroke="#713613" stroke-width="9"/>
+  </g>
+  <g fill="#dff8ff" opacity=".85">
+    <rect x="830" y="70" width="160" height="14" rx="7"/>
+    <rect x="1050" y="70" width="160" height="14" rx="7"/>
+    <rect x="1270" y="70" width="160" height="14" rx="7"/>
+  </g>
+</svg>

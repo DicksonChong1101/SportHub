@@ -1,0 +1,103 @@
+@*
+========================================
+ADMIN RESERVATION MODULE - RESERVATION DETAILS PAGE
+========================================
+*@
+
+@model Reservation
+
+@{
+    ViewData["Title"] = "Reservation details";
+    var returnUrl = ViewData["ReturnUrl"] as string ?? Url.Action("Index")!;
+    var canUpdate = Model.Status is ReservationStatuses.Pending or ReservationStatuses.Approved;
+    var statusBadgeClass = Model.Status switch
+    {
+        ReservationStatuses.Pending => "bg-warning text-dark",
+        ReservationStatuses.Approved => "bg-success",
+        ReservationStatuses.Rejected => "bg-danger",
+        ReservationStatuses.Completed => "bg-primary",
+        _ => "bg-secondary"
+    };
+}
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="alert">@successMessage</div>
+}
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+<h1 class="h2">Reservation details</h1>
+
+<dl class="row">
+    <dt class="col-sm-4">Reservation number</dt>
+    <dd class="col-sm-8">@Model.ReservationNumber</dd>
+    <dt class="col-sm-4">Member</dt>
+    <dd class="col-sm-8">@Model.User.FullName (@Model.User.Email)</dd>
+    <dt class="col-sm-4">Facility</dt>
+    <dd class="col-sm-8">@Model.Facility.Name</dd>
+    <dt class="col-sm-4">Category</dt>
+    <dd class="col-sm-8">@Model.Facility.FacilityCategory.Name</dd>
+    <dt class="col-sm-4">Date</dt>
+    <dd class="col-sm-8">@Model.ReservationDate.ToString("dd MMM yyyy")</dd>
+    <dt class="col-sm-4">Time</dt>
+    <dd class="col-sm-8">@Model.TimeSlot.DisplayText</dd>
+    <dt class="col-sm-4">Participants</dt>
+    <dd class="col-sm-8">@Model.ParticipantCount / @Model.Facility.Capacity maximum</dd>
+    <dt class="col-sm-4">Status</dt>
+    <dd class="col-sm-8"><span class="badge @statusBadgeClass">@Model.Status</span></dd>
+    <dt class="col-sm-4">Total amount</dt>
+    <dd class="col-sm-8">RM @Model.TotalAmount.ToString("N2")</dd>
+    <dt class="col-sm-4">Payment status</dt>
+    <dd class="col-sm-8">@(Model.Payment?.Status ?? PaymentStatuses.Unpaid)</dd>
+    @if (Model.Payment is not null)
+    {
+        <dt class="col-sm-4">Invoice number</dt>
+        <dd class="col-sm-8">@(Model.Payment.InvoiceNumber ?? "Not issued")</dd>
+        <dt class="col-sm-4">Payment method</dt>
+        <dd class="col-sm-8">@Model.Payment.Method</dd>
+        <dt class="col-sm-4">Payment reference</dt>
+        <dd class="col-sm-8">@(Model.Payment.TransactionReference ?? "Not submitted")</dd>
+        <dt class="col-sm-4">Account</dt>
+        <dd class="col-sm-8">•••• @(Model.Payment.PayerAccountLastFour ?? "----")</dd>
+        <dt class="col-sm-4">Submitted at</dt>
+        <dd class="col-sm-8">@(Model.Payment.SubmittedAt?.ToLocalTime().ToString("dd MMM yyyy HH:mm") ?? "Not submitted")</dd>
+        <dt class="col-sm-4">Receipt number</dt>
+        <dd class="col-sm-8">@(Model.Payment.ReceiptNumber ?? "Not issued")</dd>
+        <dt class="col-sm-4">Paid at</dt>
+        <dd class="col-sm-8">@(Model.Payment.PaidAt?.ToLocalTime().ToString("dd MMM yyyy HH:mm") ?? "Not paid")</dd>
+    }
+    <dt class="col-sm-4">Member notes</dt>
+    <dd class="col-sm-8">@(Model.Notes ?? "None")</dd>
+
+    @if (!string.IsNullOrWhiteSpace(Model.RejectionReason))
+    {
+        <dt class="col-sm-4">Rejection reason</dt>
+        <dd class="col-sm-8">@Model.RejectionReason</dd>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.CancellationReason))
+    {
+        <dt class="col-sm-4">Cancellation reason</dt>
+        <dd class="col-sm-8">@Model.CancellationReason</dd>
+    }
+</dl>
+
+@if (canUpdate)
+{
+    <a asp-action="UpdateStatus" asp-route-id="@Model.ReservationId"
+       asp-route-returnUrl="@returnUrl"
+       class="btn btn-primary">Update status</a>
+}
+@if (Model.Status == ReservationStatuses.Pending &&
+     Model.Payment?.Status != PaymentStatuses.PendingVerification)
+{
+    <div class="alert alert-warning mt-3">
+        No payment is waiting for verification. Admin may reject this request,
+        but approval becomes available only after the Member submits payment.
+    </div>
+}
+<a href="@returnUrl" class="btn btn-outline-secondary">Back to reservations</a>

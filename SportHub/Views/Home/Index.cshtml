@@ -1,0 +1,204 @@
+@*
+========================================
+HOME MODULE - PUBLIC FACILITY CATALOGUE
+========================================
+*@
+
+@model SportHub.ViewModels.HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="home-hero mb-5"
+         data-home-hero
+         data-home-hero-interval="13000"
+         aria-label="SportHub highlights">
+    @for (var index = 0; index < Model.HeroSlides.Count; index++)
+    {
+        var slide = Model.HeroSlides[index];
+        var isActive = index == 0;
+
+        <article class="home-hero-slide @(isActive ? "is-active" : string.Empty)"
+                 style="background-image: url('@slide.ImagePath')"
+                 aria-hidden="@(isActive ? "false" : "true")">
+            <div class="home-hero-overlay"></div>
+
+            <div class="home-hero-content">
+                <span class="home-hero-eyebrow">
+                    SPORTHUB &middot; RESERVE &middot; PLAY &middot; ENJOY
+                </span>
+                <h1>@slide.Title</h1>
+
+                @if (!string.IsNullOrWhiteSpace(slide.Subtitle))
+                {
+                    <p>@slide.Subtitle</p>
+                }
+
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <a href="#available-facilities"
+                       class="btn btn-light btn-lg">
+                        Explore facilities
+                    </a>
+
+                    @if (User.Identity?.IsAuthenticated != true)
+                    {
+                        <a asp-controller="Account"
+                           asp-action="Login"
+                           class="btn btn-outline-light btn-lg">
+                            Member login
+                        </a>
+                    }
+                </div>
+            </div>
+
+            <span class="visually-hidden">@slide.AltText</span>
+        </article>
+    }
+
+    @if (Model.HeroSlides.Count > 1)
+    {
+        <div class="home-hero-indicators" aria-label="Choose a Home banner">
+            @for (var index = 0; index < Model.HeroSlides.Count; index++)
+            {
+                <button type="button"
+                        class="home-hero-indicator @(index == 0 ? "is-active" : string.Empty)"
+                        data-home-hero-index="@index"
+                        aria-label="Show banner @(index + 1)"
+                        aria-current="@(index == 0 ? "true" : "false")">
+                </button>
+            }
+        </div>
+    }
+</section>
+
+<section id="available-facilities"
+         class="home-facilities-section">
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+        <div>
+            <span class="text-primary fw-semibold text-uppercase small">
+                Choose your activity
+            </span>
+            <h2 class="display-6 fw-bold mb-1">Available facilities</h2>
+            <p class="text-muted mb-0">
+                Select a facility to begin your reservation.
+            </p>
+        </div>
+
+        <span class="facility-count">
+            @Model.FacilityCount active
+            @(Model.FacilityCount == 1 ? "facility" : "facilities")
+        </span>
+    </div>
+
+    @* Public filter keeps the catalogue focused without hiding either facility type permanently. *@
+    <nav class="facility-filter-bar mb-4" aria-label="Filter facilities by environment">
+        <a asp-action="Index" asp-fragment="available-facilities"
+           class="btn @(Model.SelectedFacilityType is null ? "btn-primary" : "btn-outline-primary")">
+            All facilities
+        </a>
+        <a asp-action="Index" asp-route-facilityType="@FacilityTypes.Indoor"
+           asp-fragment="available-facilities"
+           class="btn @(Model.SelectedFacilityType == FacilityTypes.Indoor ? "btn-primary" : "btn-outline-primary")">
+            Indoor
+        </a>
+        <a asp-action="Index" asp-route-facilityType="@FacilityTypes.Outdoor"
+           asp-fragment="available-facilities"
+           class="btn @(Model.SelectedFacilityType == FacilityTypes.Outdoor ? "btn-primary" : "btn-outline-primary")">
+            Outdoor
+        </a>
+    </nav>
+
+    @if (Model.FacilityCount == 0)
+    {
+        <div class="alert alert-info">
+            No facilities are currently available. Please check again later.
+        </div>
+    }
+    else
+    {
+        @foreach (var facilityGroup in Model.FacilitySections)
+        {
+            <section class="facility-type-section" aria-labelledby="facility-type-@facilityGroup.FacilityType.ToLowerInvariant()">
+                <div class="facility-type-heading">
+                    <span class="facility-type-icon" aria-hidden="true">@facilityGroup.Icon</span>
+                    <div>
+                        <span class="facility-type-label">@facilityGroup.FacilityType activities</span>
+                        <h3 id="facility-type-@facilityGroup.FacilityType.ToLowerInvariant()" class="h2 mb-1">@facilityGroup.Heading</h3>
+                        <p class="text-muted mb-0">@facilityGroup.Description</p>
+                    </div>
+                    <span class="facility-type-count">@facilityGroup.Facilities.Count available</span>
+                </div>
+
+                <div class="row g-4">
+                    @foreach (var facility in facilityGroup.Facilities)
+                    {
+                        var bookingReturnUrl =
+                            Url.Action(
+                                "Create",
+                                "Reservations",
+                                new { facilityId = facility.FacilityId })
+                            ?? $"/Reservations/Create?facilityId={facility.FacilityId}";
+
+                        <div class="col-md-6 col-xl-4">
+                            <article class="card facility-showcase-card h-100">
+                                <div class="facility-card-image-wrap">
+                                    <img src="@facility.ImagePath"
+                                         alt="@facility.Name"
+                                         class="facility-card-image"
+                                         loading="lazy" />
+
+                                    <span class="facility-category-badge">
+                                        @facility.CategoryName
+                                    </span>
+                                </div>
+
+                                <div class="card-body d-flex flex-column">
+                                    <h4 class="h4 mb-2">@facility.Name</h4>
+
+                                    <div class="facility-meta mb-3">
+                                        <span><span aria-hidden="true">📍</span> @facility.Location</span>
+                                        <span><span aria-hidden="true">👥</span> Up to @facility.Capacity</span>
+                                    </div>
+
+                                    <p class="facility-description flex-grow-1">
+                                        @(facility.Description
+                                            ?? "A quality SportHub facility ready for your next session.")
+                                    </p>
+
+                                    <div class="d-flex justify-content-between align-items-end gap-3 mt-3">
+                                        <div>
+                                            <span class="small text-muted d-block">From</span>
+                                            <strong class="facility-price">RM @facility.PricePerSlot.ToString("N2")</strong>
+                                            <span class="small text-muted"> / slot</span>
+                                        </div>
+
+                                        @if (User.IsInRole(UserRoles.Member))
+                                        {
+                                            <a asp-controller="Reservations" asp-action="Create"
+                                               asp-route-facilityId="@facility.FacilityId" class="btn btn-primary">Book now</a>
+                                        }
+                                        else if (User.Identity?.IsAuthenticated == true)
+                                        {
+                                            <a asp-controller="Booking" asp-action="Details"
+                                               asp-route-id="@facility.FacilityId" class="btn btn-outline-primary">View details</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-controller="Account" asp-action="Login"
+                                               asp-route-returnUrl="@bookingReturnUrl" class="btn btn-primary">Book now</a>
+                                        }
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+    }
+</section>
+
+@section Scripts {
+    <script src="~/js/home-hero.js" asp-append-version="true"></script>
+}

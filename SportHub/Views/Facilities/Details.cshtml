@@ -1,0 +1,66 @@
+@*
+========================================
+FACILITY MODULE - FACILITY DETAILS PAGE
+========================================
+*@
+
+@model Facility
+
+@{
+    ViewData["Title"] = "Facility details";
+}
+
+<h1 class="h2">Facility details</h1>
+
+<dl class="row mt-4">
+    <dt class="col-sm-3">Name</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+
+    <dt class="col-sm-3">Category</dt>
+    <dd class="col-sm-9">@Model.FacilityCategory.Name</dd>
+
+    <dt class="col-sm-3">Description</dt>
+    <dd class="col-sm-9">@(Model.Description ?? "—")</dd>
+
+    <dt class="col-sm-3">Location</dt>
+    <dd class="col-sm-9">@Model.Location</dd>
+
+    <dt class="col-sm-3">Facility type</dt>
+    <dd class="col-sm-9">@Model.FacilityType</dd>
+
+    <dt class="col-sm-3">Capacity</dt>
+    <dd class="col-sm-9">@Model.Capacity</dd>
+
+    <dt class="col-sm-3">Price per slot</dt>
+    <dd class="col-sm-9">RM @Model.PricePerSlot.ToString("N2")</dd>
+
+    <dt class="col-sm-3">Status</dt>
+    <dd class="col-sm-9">@(Model.IsActive ? "Active" : "Inactive")</dd>
+
+    <dt class="col-sm-3">Created</dt>
+    <dd class="col-sm-9">@Model.CreatedAt.ToLocalTime().ToString("g")</dd>
+
+    <dt class="col-sm-3">Images</dt>
+    <dd class="col-sm-9">@Model.FacilityImages.Count</dd>
+
+    <dt class="col-sm-3">Reservations</dt>
+    <dd class="col-sm-9">@Model.Reservations.Count</dd>
+
+    <dt class="col-sm-3">Maintenance blocks</dt>
+    <dd class="col-sm-9">@Model.MaintenanceBlocks.Count</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.FacilityId" class="btn btn-primary">Edit</a>
+<a asp-controller="FacilityImages"
+   asp-action="ManageCover"
+   asp-route-facilityId="@Model.FacilityId"
+   class="btn btn-outline-info">
+    Manage display cover
+</a>
+<a asp-controller="FacilityGallery"
+   asp-action="Manage"
+   asp-route-facilityId="@Model.FacilityId"
+   class="btn btn-outline-primary">
+    Manage image gallery
+</a>
+<a asp-action="Index" class="btn btn-outline-secondary">Back to list</a>

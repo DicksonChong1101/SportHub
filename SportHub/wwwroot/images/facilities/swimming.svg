@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title">
+  <title id="title">Swimming facility</title>
+  <defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#33b8db"/><stop offset="1" stop-color="#17559a"/></linearGradient></defs>
+  <rect width="800" height="500" fill="url(#g)"/>
+  <g fill="none" stroke="#c9f6ff" stroke-width="11" opacity=".75">
+    <path d="M0 120c70-45 130 45 200 0s130 45 200 0 130 45 200 0 130 45 200 0"/>
+    <path d="M0 230c70-45 130 45 200 0s130 45 200 0 130 45 200 0 130 45 200 0"/>
+    <path d="M0 340c70-45 130 45 200 0s130 45 200 0 130 45 200 0 130 45 200 0"/>
+    <path d="M0 450c70-45 130 45 200 0s130 45 200 0 130 45 200 0 130 45 200 0"/>
+  </g>
+  <g transform="translate(510 150)">
+    <circle cx="0" cy="-60" r="42" fill="#fff"/>
+    <path d="M-165 20c90-95 155-75 250-18M-60-5l-95 120M40 6l115 95" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round"/>
+  </g>
+</svg>

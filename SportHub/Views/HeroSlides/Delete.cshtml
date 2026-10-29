@@ -1,0 +1,43 @@
+@*
+========================================
+HOME HERO MODULE - DELETE BANNER
+========================================
+*@
+
+@using SportHub.Services
+@model HeroSlide
+
+@{
+    ViewData["Title"] = "Delete Home banner";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="h2">Delete Home banner</h1>
+
+        <div class="alert alert-warning">
+            Delete this banner permanently? This action cannot be undone.
+        </div>
+
+        <div class="hero-admin-preview mb-4">
+            <img src="@HeroSlideImageService.GetDisplayPath(Model.StoredFileName)"
+                 alt="@(Model.AltText ?? Model.Title)" />
+        </div>
+
+        <h2 class="h4">@Model.Title</h2>
+        <p>@(Model.Subtitle ?? "No subtitle")</p>
+
+        <form asp-action="Delete"
+              asp-route-id="@Model.HeroSlideId"
+              asp-antiforgery="false"
+              method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger">
+                Delete banner
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>

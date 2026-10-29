@@ -1,0 +1,77 @@
+@*
+========================================
+ADMIN RESERVATION MODULE - UPDATE STATUS PAGE
+========================================
+*@
+
+@model SportHub.ViewModels.AdminReservationStatusViewModel
+
+@{
+    ViewData["Title"] = "Update reservation status";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h2">Update reservation status</h1>
+
+        <dl class="row">
+            <dt class="col-sm-4">Reservation</dt>
+            <dd class="col-sm-8">@Model.ReservationNumber</dd>
+            <dt class="col-sm-4">Member</dt>
+            <dd class="col-sm-8">@Model.MemberName</dd>
+            <dt class="col-sm-4">Facility</dt>
+            <dd class="col-sm-8">@Model.FacilityName</dd>
+            <dt class="col-sm-4">Date and time</dt>
+            <dd class="col-sm-8">
+                @Model.ReservationDate.ToString("dd MMM yyyy"), @Model.TimeSlotText
+            </dd>
+            <dt class="col-sm-4">Current status</dt>
+            <dd class="col-sm-8">@Model.CurrentStatus</dd>
+        </dl>
+
+        <form asp-action="UpdateStatus" asp-route-id="@Model.ReservationId" method="post">
+            <input asp-for="ReservationId" type="hidden" />
+            <input asp-for="RowVersion" type="hidden" />
+            <input asp-for="ReturnUrl" type="hidden" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="NewStatus" class="form-label"></label>
+                <select asp-for="NewStatus" asp-items="Model.StatusOptions" class="form-select">
+                    <option value="">Select the next status</option>
+                </select>
+                <span asp-validation-for="NewStatus" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3" id="rejectionReasonGroup">
+                <label asp-for="RejectionReason" class="form-label"></label>
+                <textarea asp-for="RejectionReason" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="RejectionReason" class="text-danger"></span>
+                <div class="form-text">Required only when the reservation is rejected.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save status</button>
+            <a asp-action="Details" asp-route-id="@Model.ReservationId"
+               asp-route-returnUrl="@Model.ReturnUrl"
+               class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const statusSelect = document.getElementById('NewStatus');
+        const rejectionGroup = document.getElementById('rejectionReasonGroup');
+
+        // Shows the rejection reason field only
+        // when the administrator selects Rejected.
+        function updateRejectionReasonVisibility() {
+            rejectionGroup.hidden = statusSelect.value !== 'Rejected';
+        }
+
+        statusSelect.addEventListener('change', updateRejectionReasonVisibility);
+        updateRejectionReasonVisibility();
+    </script>
+}

@@ -1,0 +1,155 @@
+@*
+========================================
+STUDENT C - ADMIN REPORTING DASHBOARD
+========================================
+*@
+
+@model SportHub.ViewModels.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Operations dashboard";
+    var statusLabels = Model.StatusBreakdown.Select(item => item.Label);
+    var statusValues = Model.StatusBreakdown.Select(item => item.Value);
+    var facilityLabels = Model.PopularFacilities.Select(item => item.Label);
+    var facilityValues = Model.PopularFacilities.Select(item => item.Value);
+    var revenueLabels = Model.RevenueTrend.Select(item => item.Label);
+    var revenueValues = Model.RevenueTrend.Select(item => item.Value);
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+        <span class="text-success fw-bold text-uppercase small">Student C reporting</span>
+        <h1 class="display-6 fw-bold mb-1">Operations dashboard</h1>
+        <p class="text-muted mb-0">Monitor reservations, participation, facility demand and verified revenue.</p>
+    </div>
+</div>
+
+<form method="get" class="card card-body border-0 shadow-sm mb-4">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+    <div class="row g-3 align-items-end">
+        <div class="col-sm-5 col-lg-3">
+            <label asp-for="FromDate" class="form-label">From date</label>
+            <input asp-for="FromDate" type="date" class="form-control" />
+        </div>
+        <div class="col-sm-5 col-lg-3">
+            <label asp-for="ToDate" class="form-label">To date</label>
+            <input asp-for="ToDate" type="date" class="form-control" />
+        </div>
+        <div class="col-sm-2 col-lg-2 d-grid">
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+        <div class="col-lg-4">
+            <span class="small text-muted">Showing @Model.FromDate.ToString("dd MMM yyyy") - @Model.ToDate.ToString("dd MMM yyyy")</span>
+        </div>
+    </div>
+</form>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3"><section class="dashboard-kpi"><span>Total reservations</span><strong>@Model.TotalReservations</strong></section></div>
+    <div class="col-sm-6 col-xl-3"><section class="dashboard-kpi"><span>Pending review</span><strong>@Model.PendingReservations</strong></section></div>
+    <div class="col-sm-6 col-xl-3"><section class="dashboard-kpi"><span>Verified revenue</span><strong>RM @Model.PaidRevenue.ToString("N2")</strong></section></div>
+    <div class="col-sm-6 col-xl-3"><section class="dashboard-kpi"><span>Total participants</span><strong>@Model.TotalParticipants</strong></section></div>
+    <div class="col-sm-6 col-xl-3"><section class="dashboard-kpi dashboard-kpi-small"><span>Approved</span><strong>@Model.ApprovedReservations</strong></section></div>
+    <div class="col-sm-6 col-xl-3"><section class="dashboard-kpi dashboard-kpi-small"><span>Completed</span><strong>@Model.CompletedReservations</strong></section></div>
+    <div class="col-sm-6 col-xl-3"><section class="dashboard-kpi dashboard-kpi-small"><span>Active facilities</span><strong>@Model.ActiveFacilities</strong></section></div>
+    <div class="col-sm-6 col-xl-3"><section class="dashboard-kpi dashboard-kpi-small"><span>Maintenance next 7 days</span><strong>@Model.UpcomingMaintenanceBlocks</strong></section></div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <section class="dashboard-chart-card">
+            <h2 class="h4">Reservation status</h2>
+            <p class="text-muted small">Distribution within the selected period.</p>
+            <div class="dashboard-chart-wrap"><canvas id="statusChart"></canvas></div>
+        </section>
+    </div>
+    <div class="col-lg-7">
+        <section class="dashboard-chart-card">
+            <h2 class="h4">Most popular facilities</h2>
+            <p class="text-muted small">Bookings excluding cancelled and rejected requests.</p>
+            <div class="dashboard-chart-wrap"><canvas id="facilityChart"></canvas></div>
+        </section>
+    </div>
+    <div class="col-12">
+        <section class="dashboard-chart-card">
+            <h2 class="h4">Verified revenue trend</h2>
+            <p class="text-muted small">Only payments approved by Admin are counted.</p>
+            @if (Model.RevenueTrend.Count == 0)
+            {
+                <div class="alert alert-info mb-0">No verified revenue exists in this reporting period.</div>
+            }
+            else
+            {
+                <div class="dashboard-chart-wrap dashboard-chart-wide"><canvas id="revenueChart"></canvas></div>
+            }
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    @* Chart.js is loaded from its documented CDN distribution for the reporting module. *@
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // =====================================================
+        // STUDENT C ADDITIONAL FEATURE - INTERACTIVE CHARTS
+        // Razor supplies server-calculated data; Chart.js renders it.
+        // =====================================================
+        (() => {
+            if (typeof Chart === "undefined") {
+                return;
+            }
+
+            const statusLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(statusLabels));
+            const statusValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(statusValues));
+            const facilityLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(facilityLabels));
+            const facilityValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(facilityValues));
+            const revenueLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(revenueLabels));
+            const revenueValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(revenueValues));
+
+            new Chart(document.getElementById("statusChart"), {
+                type: "doughnut",
+                data: {
+                    labels: statusLabels,
+                    datasets: [{
+                        data: statusValues,
+                        backgroundColor: ["#f2b84b", "#2e9b63", "#d9534f", "#77808a", "#246bfd"]
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById("facilityChart"), {
+                type: "bar",
+                data: {
+                    labels: facilityLabels,
+                    datasets: [{ label: "Reservations", data: facilityValues, backgroundColor: "#2375d8", borderRadius: 8 }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                }
+            });
+
+            const revenueCanvas = document.getElementById("revenueChart");
+            if (revenueCanvas) {
+                new Chart(revenueCanvas, {
+                    type: "line",
+                    data: {
+                        labels: revenueLabels,
+                        datasets: [{
+                            label: "Revenue (RM)",
+                            data: revenueValues,
+                            borderColor: "#198754",
+                            backgroundColor: "rgba(25, 135, 84, 0.14)",
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+                });
+            }
+        })();
+    </script>
+}

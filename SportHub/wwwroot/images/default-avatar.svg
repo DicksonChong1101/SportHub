@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="title description">
+  <title id="title">Default SportHub profile avatar</title>
+  <desc id="description">A white person silhouette on a blue circular background</desc>
+  <circle cx="100" cy="100" r="100" fill="#0d6efd"/>
+  <circle cx="100" cy="73" r="34" fill="#ffffff"/>
+  <path d="M38 172c5-38 29-59 62-59s57 21 62 59" fill="#ffffff"/>
+</svg>

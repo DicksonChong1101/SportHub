@@ -1,0 +1,30 @@
+@*
+========================================
+TIME SLOT MODULE - TIME SLOT DETAILS PAGE
+========================================
+*@
+
+@model TimeSlot
+
+@{
+    ViewData["Title"] = "Time slot details";
+}
+
+<h1 class="h2">Time slot details</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Time</dt>
+    <dd class="col-sm-9">@Model.DisplayText</dd>
+
+    <dt class="col-sm-3">Display order</dt>
+    <dd class="col-sm-9">@Model.DisplayOrder</dd>
+
+    <dt class="col-sm-3">Status</dt>
+    <dd class="col-sm-9">@(Model.IsActive ? "Active" : "Inactive")</dd>
+
+    <dt class="col-sm-3">Reservations</dt>
+    <dd class="col-sm-9">@Model.Reservations.Count</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.TimeSlotId" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-outline-secondary">Back to list</a>

@@ -1,0 +1,64 @@
+@model SportHub.ViewModels.FacilityFormViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" autocomplete="off" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="FacilityCategoryId" class="form-label"></label>
+    <select asp-for="FacilityCategoryId" asp-items="Model.CategoryOptions" class="form-select">
+        <option value="">Select a category</option>
+    </select>
+    <span asp-validation-for="FacilityCategoryId" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Location" class="form-label"></label>
+    <input asp-for="Location" class="form-control" autocomplete="off" />
+    <span asp-validation-for="Location" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="FacilityType" class="form-label"></label>
+    <select asp-for="FacilityType" class="form-select">
+        <option value="Indoor">Indoor facility</option>
+        <option value="Outdoor">Outdoor facility</option>
+    </select>
+    <div class="form-text">
+        This decides which section displays the facility on the Home page.
+    </div>
+    <span asp-validation-for="FacilityType" class="text-danger"></span>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="Capacity" class="form-label"></label>
+        <input asp-for="Capacity" class="form-control" min="1" max="1000" />
+        <span asp-validation-for="Capacity" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label asp-for="PricePerSlot" class="form-label"></label>
+        <div class="input-group">
+            <span class="input-group-text">RM</span>
+            <input asp-for="PricePerSlot" class="form-control"
+                   min="0.01" max="9999.99" step="0.01" />
+        </div>
+        <span asp-validation-for="PricePerSlot" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="form-check mb-3">
+    <input asp-for="IsActive" class="form-check-input" />
+    <label asp-for="IsActive" class="form-check-label"></label>
+</div>

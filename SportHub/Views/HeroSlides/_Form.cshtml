@@ -1,0 +1,76 @@
+@model SportHub.ViewModels.HeroSlideFormViewModel
+
+<input asp-for="HeroSlideId" type="hidden" />
+
+<div asp-validation-summary="ModelOnly"
+     class="text-danger mb-3">
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.CurrentImagePath))
+{
+    <div class="hero-admin-preview mb-4">
+        <img src="@Model.CurrentImagePath"
+             alt="Current Home banner" />
+    </div>
+}
+
+<div class="mb-3">
+    <label asp-for="Title" class="form-label"></label>
+    <input asp-for="Title" class="form-control" />
+    <span asp-validation-for="Title" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Subtitle" class="form-label"></label>
+    <textarea asp-for="Subtitle"
+              class="form-control"
+              rows="3">
+    </textarea>
+    <span asp-validation-for="Subtitle" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="AltText" class="form-label"></label>
+    <input asp-for="AltText" class="form-control" />
+    <span asp-validation-for="AltText" class="text-danger"></span>
+    <div class="form-text">
+        Briefly describe the image for screen-reader users.
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="DisplayOrder" class="form-label"></label>
+        <input asp-for="DisplayOrder"
+               class="form-control"
+               min="0"
+               max="100" />
+        <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6 mb-3 d-flex align-items-end">
+        <div class="form-check mb-2">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label asp-for="IsActive" class="form-check-label"></label>
+        </div>
+    </div>
+</div>
+
+<div class="mb-4">
+    <label asp-for="Image" class="form-label"></label>
+    <input asp-for="Image"
+           type="file"
+           class="form-control"
+           accept="image/jpeg,image/png,image/webp" />
+    <span asp-validation-for="Image" class="text-danger"></span>
+    <div id="hero-image-processing-status"
+         class="form-text"
+         role="status"
+         aria-live="polite"></div>
+    <div class="form-text">
+        JPG, PNG or WebP. Large photos are automatically resized and compressed
+        before upload; the saved web image must be below 8 MB.
+        Landscape images are recommended.
+        On Edit, leave this empty to keep the current image.
+    </div>
+</div>

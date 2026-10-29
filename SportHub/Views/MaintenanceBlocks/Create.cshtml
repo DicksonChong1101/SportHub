@@ -1,0 +1,26 @@
+@*
+========================================
+MAINTENANCE MODULE - CREATE MAINTENANCE BLOCK PAGE
+========================================
+*@
+
+@model SportHub.ViewModels.MaintenanceBlockFormViewModel
+
+@{
+    ViewData["Title"] = "Create maintenance block";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h2">Create maintenance block</h1>
+        <form asp-action="Create" method="post">
+            <partial name="_Form" model="Model" />
+            <button type="submit" class="btn btn-primary">Create block</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

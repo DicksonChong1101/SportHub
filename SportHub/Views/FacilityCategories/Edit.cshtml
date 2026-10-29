@@ -1,0 +1,27 @@
+@*
+========================================
+FACILITY CATEGORY MODULE - EDIT CATEGORY PAGE
+========================================
+*@
+
+@model SportHub.ViewModels.FacilityCategoryFormViewModel
+
+@{
+    ViewData["Title"] = "Edit facility category";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h2">Edit facility category</h1>
+
+        <form asp-action="Edit" method="post">
+            <partial name="_Form" model="Model" />
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,44 @@
+@*
+========================================
+TIME SLOT MODULE - DELETE TIME SLOT PAGE
+========================================
+*@
+
+@model TimeSlot
+
+@{
+    ViewData["Title"] = "Delete time slot";
+    var hasReservations = Model.Reservations.Count > 0;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h2">Delete time slot</h1>
+
+        <div class="alert @(hasReservations ? "alert-warning" : "alert-danger")" role="alert">
+            @if (hasReservations)
+            {
+                <span>This time slot has reservations and will be deactivated instead of deleted.</span>
+            }
+            else
+            {
+                <span>This time slot has no reservations and will be permanently deleted.</span>
+            }
+        </div>
+
+        <dl class="row">
+            <dt class="col-sm-4">Time</dt>
+            <dd class="col-sm-8">@Model.DisplayText</dd>
+
+            <dt class="col-sm-4">Reservations</dt>
+            <dd class="col-sm-8">@Model.Reservations.Count</dd>
+        </dl>
+
+        <form asp-action="Delete" asp-route-id="@Model.TimeSlotId" method="post">
+            <button type="submit" class="btn btn-danger">
+                @(hasReservations ? "Deactivate time slot" : "Delete permanently")
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

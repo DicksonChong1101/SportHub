@@ -1,0 +1,51 @@
+@*
+========================================
+STUDENT C PAYMENT MODULE - INVOICE PAGE
+========================================
+*@
+
+@model SportHub.ViewModels.PaymentCheckoutViewModel
+
+@{
+    ViewData["Title"] = "Invoice";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <section class="payment-invoice-card">
+            <div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
+                <div>
+                    <span class="text-success fw-bold">SPORTHUB INVOICE</span>
+                    <h1 class="h2 mb-1">@Model.InvoiceNumber</h1>
+                    <p class="text-muted mb-0">Review the amount before continuing.</p>
+                </div>
+                <div class="text-lg-end">
+                    <span class="badge bg-warning text-dark">Unpaid</span>
+                    <div class="display-6 fw-bold mt-2">RM @Model.Amount.ToString("N2")</div>
+                </div>
+            </div>
+
+            <dl class="row mb-4">
+                <dt class="col-sm-4">Reservation</dt>
+                <dd class="col-sm-8">@Model.ReservationNumber</dd>
+                <dt class="col-sm-4">Facility</dt>
+                <dd class="col-sm-8">@Model.FacilityName</dd>
+                <dt class="col-sm-4">Date</dt>
+                <dd class="col-sm-8">@Model.ReservationDate.ToString("dd MMM yyyy")</dd>
+                <dt class="col-sm-4">Time</dt>
+                <dd class="col-sm-8">@Model.TimeSlotText</dd>
+            </dl>
+
+            <div class="alert alert-info">
+                This is an assignment payment simulation. Never enter a real banking
+                password, PIN, card number or OTP.
+            </div>
+
+            <a asp-action="Checkout" asp-route-reservationId="@Model.ReservationId"
+               class="btn btn-success">Proceed to simulated payment</a>
+            <a asp-controller="Reservations" asp-action="Details"
+               asp-route-id="@Model.ReservationId"
+               class="btn btn-outline-secondary">Back to reservation</a>
+        </section>
+    </div>
+</div>

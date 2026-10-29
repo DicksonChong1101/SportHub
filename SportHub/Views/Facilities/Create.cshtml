@@ -1,0 +1,27 @@
+@*
+========================================
+FACILITY MODULE - CREATE FACILITY PAGE
+========================================
+*@
+
+@model SportHub.ViewModels.FacilityFormViewModel
+
+@{
+    ViewData["Title"] = "Create facility";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="h2">Create facility</h1>
+
+        <form asp-action="Create" method="post">
+            <partial name="_Form" model="Model" />
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

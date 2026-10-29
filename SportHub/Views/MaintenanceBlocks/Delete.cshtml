@@ -1,0 +1,31 @@
+@*
+========================================
+MAINTENANCE MODULE - DELETE MAINTENANCE BLOCK PAGE
+========================================
+*@
+
+@model MaintenanceBlock
+
+@{
+    ViewData["Title"] = "Delete maintenance block";
+}
+
+<h1 class="h2">Delete maintenance block</h1>
+<div class="alert alert-warning">Confirm that you want to delete this maintenance block.</div>
+
+<dl class="row">
+    <dt class="col-sm-4">Facility</dt>
+    <dd class="col-sm-8">@Model.Facility.Name</dd>
+    <dt class="col-sm-4">Period</dt>
+    <dd class="col-sm-8">
+        @Model.StartAt.ToString("dd MMM yyyy HH:mm") -
+        @Model.EndAt.ToString("dd MMM yyyy HH:mm")
+    </dd>
+    <dt class="col-sm-4">Reason</dt>
+    <dd class="col-sm-8">@Model.Reason</dd>
+</dl>
+
+<form asp-action="Delete" asp-route-id="@Model.MaintenanceBlockId" method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>

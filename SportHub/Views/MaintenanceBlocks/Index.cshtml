@@ -1,0 +1,75 @@
+@*
+========================================
+MAINTENANCE MODULE - MAINTENANCE BLOCK LIST PAGE
+========================================
+*@
+
+@model IReadOnlyList<MaintenanceBlock>
+
+@{
+    ViewData["Title"] = "Maintenance blocks";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="h2 mb-1">Maintenance blocks</h1>
+        <p class="text-muted mb-0">Close facilities for maintenance, events or other unavailable periods.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">Create maintenance block</a>
+</div>
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="alert">@successMessage</div>
+}
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">No maintenance blocks have been created.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Facility</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var block in Model)
+                {
+                    <tr>
+                        <td>@block.Facility.Name</td>
+                        <td>@block.StartAt.ToString("dd MMM yyyy HH:mm")</td>
+                        <td>@block.EndAt.ToString("dd MMM yyyy HH:mm")</td>
+                        <td>@block.Reason</td>
+                        <td>
+                            <span class="badge @(block.IsActive ? "bg-danger" : "bg-secondary")">
+                                @(block.IsActive ? "Active" : "Inactive")
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@block.MaintenanceBlockId"
+                               class="btn btn-sm btn-outline-secondary">Details</a>
+                            <a asp-action="Edit" asp-route-id="@block.MaintenanceBlockId"
+                               class="btn btn-sm btn-outline-primary">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@block.MaintenanceBlockId"
+                               class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

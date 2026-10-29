@@ -1,0 +1,29 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build output
+bin/
+obj/
+
+# Local database files
+*.mdf
+*.ldf
+*.db
+*.sqlite
+*.bak
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+secrets.json
+appsettings.Local.json
+
+# Runtime data and user uploads
+App_Data/EmailOutbox/
+wwwroot/uploads/profiles/
+
+# Local-only files
+*.log

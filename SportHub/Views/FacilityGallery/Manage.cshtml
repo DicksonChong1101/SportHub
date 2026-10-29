@@ -1,0 +1,142 @@
+@*
+========================================
+STUDENT A ADDITIONAL FEATURE - FACILITY IMAGE GALLERY
+========================================
+*@
+@model SportHub.ViewModels.FacilityGalleryViewModel
+
+@{
+    ViewData["Title"] = "Facility image gallery";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+        <span class="text-primary fw-semibold text-uppercase small">
+            @Model.CategoryName
+        </span>
+        <h1 class="h2 mb-1">@Model.FacilityName gallery</h1>
+        <p class="text-muted mb-0">
+            Upload up to eight images and choose the main booking cover.
+        </p>
+    </div>
+    <a asp-controller="Facilities"
+       asp-action="Details"
+       asp-route-id="@Model.FacilityId"
+       class="btn btn-outline-secondary">
+        Back to facility
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success">@successMessage</div>
+}
+
+<form asp-action="Upload"
+      method="post"
+      enctype="multipart/form-data"
+      class="card card-body border-0 shadow-sm mb-4">
+    <input asp-for="FacilityId" type="hidden" />
+
+    <div asp-validation-summary="ModelOnly"
+         class="text-danger mb-3"></div>
+
+    <div class="row g-3 align-items-end">
+        <div class="col-lg-9">
+            <label asp-for="NewImages"
+                   class="form-label fw-semibold"></label>
+            <input asp-for="NewImages"
+                   type="file"
+                   multiple
+                   accept="image/jpeg,image/png,image/webp"
+                   class="form-control" />
+            <span asp-validation-for="NewImages"
+                  class="text-danger"></span>
+            <div class="form-text">
+                Select up to five files per upload. JPG, PNG or WebP;
+                maximum 5 MB each.
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <button type="submit"
+                    class="btn btn-primary w-100">
+                Upload images
+            </button>
+        </div>
+    </div>
+</form>
+
+@if (Model.Images.Count == 0)
+{
+    <div class="alert alert-info">
+        No custom images yet. SportHub is currently using the category default image.
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var image in Model.Images)
+        {
+            <div class="col-md-6 col-xl-4">
+                <article class="card h-100 border-0 shadow-sm overflow-hidden">
+                    <img src="@image.ImagePath"
+                         alt="@image.AltText"
+                         class="card-img-top"
+                         style="height: 220px; object-fit: cover;" />
+
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="small text-muted">
+                                Display order @image.DisplayOrder
+                            </span>
+                            @if (image.IsPrimary)
+                            {
+                                <span class="badge text-bg-success">
+                                    Main cover
+                                </span>
+                            }
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            @if (!image.IsPrimary)
+                            {
+                                <form asp-action="SetPrimary" method="post">
+                                    <input type="hidden"
+                                           name="facilityId"
+                                           value="@Model.FacilityId" />
+                                    <input type="hidden"
+                                           name="imageId"
+                                           value="@image.FacilityImageId" />
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-primary">
+                                        Set as cover
+                                    </button>
+                                </form>
+                            }
+
+                            <form asp-action="Delete"
+                                  method="post"
+                                  onsubmit="return confirm('Delete this facility image?');">
+                                <input type="hidden"
+                                       name="facilityId"
+                                       value="@Model.FacilityId" />
+                                <input type="hidden"
+                                       name="imageId"
+                                       value="@image.FacilityImageId" />
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

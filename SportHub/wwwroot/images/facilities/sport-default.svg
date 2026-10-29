@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title">
+  <title id="title">Sport facility</title>
+  <defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#565ac8"/><stop offset="1" stop-color="#193866"/></linearGradient></defs>
+  <rect width="800" height="500" fill="url(#g)"/>
+  <circle cx="625" cy="145" r="145" fill="#78d7ff" opacity=".22"/>
+  <circle cx="155" cy="390" r="190" fill="#ffcf70" opacity=".16"/>
+  <g transform="translate(400 245)" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <circle cy="-105" r="45" fill="#fff"/>
+    <path d="M0-55L-20 65M-10-25l-105 70M-3-20l105 45M-20 65l-105 105M-20 65l120 105"/>
+  </g>
+</svg>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+@{
+    var navigationProfileImagePath = User.FindFirst("SportHub.ProfileImagePath")?.Value
+        ?? "/images/default-avatar.svg";
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#155c36" />
+    <title>@ViewData["Title"] - SportHub</title>
+    @* Uses the SportHub logo as the browser-tab icon. *@
+    <link rel="icon" type="image/png" href="~/images/sporthub-logo.png" />
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SportHub.styles.css" asp-append-version="true" />
+</head>
+<body class="sporthub-site">
+    @* =====================================================
+       UI/UX BOSS - RESPONSIVE GLOBAL NAVIGATION
+       Admin tools are grouped to keep desktop and mobile navigation clear.
+       ===================================================== *@
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg navbar-light site-navbar">
+            <div class="container-fluid site-nav-container">
+                @* Brand logo and name always return the user to Home. *@
+                <a class="navbar-brand sporthub-brand"
+                   asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/sporthub-logo.png" alt="" class="sporthub-brand-logo" />
+                    <span>SportHub</span>
+                </a>
+
+                <button class="navbar-toggler" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Home" && currentAction == "Index" ? "active" : string.Empty)"
+                               asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <a class="nav-link @(currentController == "Booking" ? "active" : string.Empty)"
+                                   asp-controller="Booking" asp-action="Index">Facilities</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" asp-controller="Home" asp-action="Index"
+                                   asp-fragment="available-facilities">Facilities</a>
+                            }
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Home" && currentAction == "About" ? "active" : string.Empty)"
+                               asp-area="" asp-controller="Home" asp-action="About">About us</a>
+                        </li>
+
+                        @* Admin-only navigation for facility configuration. *@
+                        @if (User.IsInRole(UserRoles.Admin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "AdminReservations" ? "active" : string.Empty)"
+                                   asp-controller="AdminReservations" asp-action="Index">Reservations</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <button class="nav-link dropdown-toggle @(currentController is "Reports" or "AdminUsers" or "FacilityCategories" or "Facilities" or "TimeSlots" or "MaintenanceBlocks" or "HeroSlides" ? "active" : string.Empty)"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Manage
+                                </button>
+                                <ul class="dropdown-menu site-admin-menu">
+                                    <li><a class="dropdown-item" asp-controller="Reports" asp-action="Index">Dashboard &amp; reports</a></li>
+                                    <li><a class="dropdown-item" asp-controller="AdminUsers" asp-action="Index">Users</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" asp-controller="FacilityCategories" asp-action="Index">Facility categories</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Facilities" asp-action="Index">Facilities</a></li>
+                                    <li><a class="dropdown-item" asp-controller="TimeSlots" asp-action="Index">Time slots</a></li>
+                                    <li><a class="dropdown-item" asp-controller="MaintenanceBlocks" asp-action="Index">Maintenance</a></li>
+                                    <li><a class="dropdown-item" asp-controller="HeroSlides" asp-action="Index">Home banners</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        @if (User.IsInRole(UserRoles.Member))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Reservations" ? "active" : string.Empty)"
+                                   asp-controller="Reservations" asp-action="Index">My reservations</a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav align-items-lg-center site-account-nav">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item dropdown">
+                                <button class="nav-link dropdown-toggle site-profile-trigger"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="@navigationProfileImagePath" alt="@User.Identity.Name profile"
+                                         class="profile-avatar profile-avatar-nav" />
+                                    <span class="site-profile-copy">
+                                        <small>Welcome back</small>
+                                        <strong>@User.Identity.Name</strong>
+                                    </span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end site-profile-menu">
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile">My profile</a></li>
+                                    @if (User.IsInRole(UserRoles.Member))
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Index">My reservations</a></li>
+                                    }
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post">
+                                            <button type="submit" class="dropdown-item text-danger">Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary site-login-button"
+                                   asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container site-main-shell">
+        <main role="main" class="site-main-content">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container site-footer-inner">
+            <a class="site-footer-brand" asp-controller="Home" asp-action="Index">
+                <img src="~/images/sporthub-logo.png" alt="" />
+                <span>SportHub</span>
+            </a>
+            <p class="mb-0">Reserve your space. Play your game. Enjoy every session.</p>
+            <div class="site-footer-links">
+                <a asp-controller="Home" asp-action="About">About &amp; rules</a>
+                <a asp-controller="Home" asp-action="Index" asp-fragment="available-facilities">Facilities</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

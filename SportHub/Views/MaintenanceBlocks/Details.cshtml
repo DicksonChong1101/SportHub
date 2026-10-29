@@ -1,0 +1,32 @@
+@*
+========================================
+MAINTENANCE MODULE - MAINTENANCE BLOCK DETAILS PAGE
+========================================
+*@
+
+@model MaintenanceBlock
+
+@{
+    ViewData["Title"] = "Maintenance block details";
+}
+
+<h1 class="h2">Maintenance block details</h1>
+
+<dl class="row">
+    <dt class="col-sm-4">Facility</dt>
+    <dd class="col-sm-8">@Model.Facility.Name</dd>
+    <dt class="col-sm-4">Start</dt>
+    <dd class="col-sm-8">@Model.StartAt.ToString("dd MMM yyyy HH:mm")</dd>
+    <dt class="col-sm-4">End</dt>
+    <dd class="col-sm-8">@Model.EndAt.ToString("dd MMM yyyy HH:mm")</dd>
+    <dt class="col-sm-4">Reason</dt>
+    <dd class="col-sm-8">@Model.Reason</dd>
+    <dt class="col-sm-4">Status</dt>
+    <dd class="col-sm-8">@(Model.IsActive ? "Active" : "Inactive")</dd>
+    <dt class="col-sm-4">Created by</dt>
+    <dd class="col-sm-8">@Model.CreatedByUser.FullName</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.MaintenanceBlockId"
+   class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-outline-secondary">Back to maintenance blocks</a>

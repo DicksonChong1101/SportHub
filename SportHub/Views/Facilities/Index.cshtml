@@ -1,0 +1,113 @@
+@*
+========================================
+FACILITY MODULE - FACILITY LIST PAGE
+========================================
+*@
+
+@model IReadOnlyList<Facility>
+
+@{
+    ViewData["Title"] = "Facilities";
+    var selectedFacilityType = ViewData["FacilityType"] as string;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="h2 mb-1">Facilities</h1>
+        <p class="text-muted mb-0">Manage bookable sports facilities and their prices.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">Create facility</a>
+</div>
+
+<form method="get" class="card card-body border-0 shadow-sm mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-sm-7 col-lg-4">
+            <label for="facilityType" class="form-label">Facility type</label>
+            <select id="facilityType" name="facilityType" class="form-select">
+                <option value="">All facility types</option>
+                <option value="@FacilityTypes.Indoor" selected="@(selectedFacilityType == FacilityTypes.Indoor)">Indoor</option>
+                <option value="@FacilityTypes.Outdoor" selected="@(selectedFacilityType == FacilityTypes.Outdoor)">Outdoor</option>
+            </select>
+        </div>
+        <div class="col-sm-5 col-lg-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Apply filter</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+        </div>
+    </div>
+</form>
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="alert">@successMessage</div>
+}
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">No facilities have been created.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Location</th>
+                    <th>Capacity</th>
+                    <th>Price per slot</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var facility in Model)
+                {
+                    <tr>
+                        <td>@facility.Name</td>
+                        <td>@facility.FacilityCategory.Name</td>
+                        <td>
+                            <span class="badge @(facility.FacilityType == FacilityTypes.Outdoor ? "bg-success" : "bg-info text-dark")">
+                                @facility.FacilityType
+                            </span>
+                        </td>
+                        <td>@facility.Location</td>
+                        <td>@facility.Capacity</td>
+                        <td>RM @facility.PricePerSlot.ToString("N2")</td>
+                        <td>
+                            <span class="badge @(facility.IsActive ? "bg-success" : "bg-secondary")">
+                                @(facility.IsActive ? "Active" : "Inactive")
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@facility.FacilityId"
+                               class="btn btn-sm btn-outline-secondary">Details</a>
+                            <a asp-action="Edit" asp-route-id="@facility.FacilityId"
+class="btn btn-sm btn-outline-primary">Edit</a>
+                            <a asp-controller="FacilityImages"
+                               asp-action="ManageCover"
+                               asp-route-facilityId="@facility.FacilityId"
+                               class="btn btn-sm btn-outline-info">
+                                Cover
+                            </a>
+                            <a asp-controller="FacilityGallery"
+                               asp-action="Manage"
+                               asp-route-facilityId="@facility.FacilityId"
+                               class="btn btn-sm btn-outline-primary">
+                                Gallery
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@facility.FacilityId"
+                               class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

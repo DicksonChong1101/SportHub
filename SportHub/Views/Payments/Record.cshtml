@@ -1,0 +1,68 @@
+@*
+========================================
+PAYMENT MODULE - RECORD PAYMENT PAGE
+========================================
+*@
+
+@model SportHub.ViewModels.PaymentRecordViewModel
+
+@{
+    ViewData["Title"] = "Record payment";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h2">Record payment</h1>
+        <p class="text-muted">Record a simulated payment for an approved reservation.</p>
+
+        <dl class="row">
+            <dt class="col-sm-4">Reservation</dt>
+            <dd class="col-sm-8">@Model.ReservationNumber</dd>
+            <dt class="col-sm-4">Member</dt>
+            <dd class="col-sm-8">@Model.MemberName</dd>
+            <dt class="col-sm-4">Facility</dt>
+            <dd class="col-sm-8">@Model.FacilityName</dd>
+            <dt class="col-sm-4">Amount</dt>
+            <dd class="col-sm-8">RM @Model.Amount.ToString("N2")</dd>
+        </dl>
+
+        <form asp-action="Record" asp-route-reservationId="@Model.ReservationId" method="post">
+            <input asp-for="ReservationId" type="hidden" />
+            <input asp-for="ReturnUrl" type="hidden" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Method" class="form-label"></label>
+                <select asp-for="Method" asp-items="Model.MethodOptions" class="form-select"></select>
+                <span asp-validation-for="Method" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3" id="transactionReferenceGroup">
+                <label asp-for="TransactionReference" class="form-label"></label>
+                <input asp-for="TransactionReference" class="form-control" />
+                <span asp-validation-for="TransactionReference" class="text-danger"></span>
+                <div class="form-text">Required for Card and Online Transfer.</div>
+            </div>
+
+            <button type="submit" class="btn btn-success">Confirm payment</button>
+            <a href="@Model.ReturnUrl" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const methodSelect = document.getElementById('Method');
+        const referenceGroup = document.getElementById('transactionReferenceGroup');
+
+        // Cash does not need a transaction reference.
+        function updateReferenceVisibility() {
+            referenceGroup.hidden = methodSelect.value === 'Cash';
+        }
+
+        methodSelect.addEventListener('change', updateReferenceVisibility);
+        updateReferenceVisibility();
+    </script>
+}

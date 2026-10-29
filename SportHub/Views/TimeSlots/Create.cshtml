@@ -1,0 +1,27 @@
+@*
+========================================
+TIME SLOT MODULE - CREATE TIME SLOT PAGE
+========================================
+*@
+
+@model SportHub.ViewModels.TimeSlotFormViewModel
+
+@{
+    ViewData["Title"] = "Create time slot";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h2">Create time slot</h1>
+        <form asp-action="Create" method="post">
+            @* Create and Edit share the same fields and validation markup. *@
+            <partial name="_Form" model="Model" />
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

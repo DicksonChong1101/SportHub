@@ -1,0 +1,89 @@
+@*
+========================================
+STUDENT A CORE - ADMIN USER EDIT PAGE
+========================================
+*@
+@using SportHub.Models
+@model SportHub.ViewModels.AdminUserEditViewModel
+
+@{
+    ViewData["Title"] = "Edit user";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="mb-4">
+            <span class="text-primary fw-semibold text-uppercase small">
+                User management
+            </span>
+            <h1 class="h2 mb-1">Edit account</h1>
+            <p class="text-muted mb-0">@Model.Email</p>
+        </div>
+
+        <form asp-action="Edit"
+              asp-route-id="@Model.UserId"
+              method="post"
+              class="card card-body border-0 shadow-sm p-4">
+            <input asp-for="UserId" type="hidden" />
+            <input asp-for="Email" type="hidden" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input value="@Model.Email"
+                       class="form-control"
+                       disabled />
+                <div class="form-text">
+                    Email is the account identifier and cannot be edited here.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PhoneNumber" class="form-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Role" class="form-label"></label>
+                <select asp-for="Role" class="form-select">
+                    <option value="@UserRoles.Admin">Admin</option>
+                    <option value="@UserRoles.Member">Member</option>
+                </select>
+                <span asp-validation-for="Role"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-4">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label asp-for="IsActive" class="form-check-label"></label>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    Save changes
+                </button>
+                <a asp-action="Details"
+                   asp-route-id="@Model.UserId"
+                   class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
